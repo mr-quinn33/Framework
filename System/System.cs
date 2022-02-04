@@ -17,6 +17,11 @@ namespace Framework.System
             _architecture = architecture;
         }
 
-        public abstract void Initialization();
+        void ISystem.Initialize()
+        {
+            Initialize();
+        }
+
+        private protected abstract void Initialize();
     }
 }

@@ -4,6 +4,6 @@ namespace Framework.Interface
 {
     public interface ISystem : ISetArchitecture, IGetSystem, IGetModel, IGetUtility, IRegisterEvent, IUnregisterEvent, IInvokeEvent
     {
-        void Initialization();
+        void Initialize();
     }
 }

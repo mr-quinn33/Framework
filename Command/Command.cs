@@ -17,6 +17,11 @@ namespace Framework.Command
             _architecture = architecture;
         }
 
-        public abstract void Execute();
+        void ICommand.Execute()
+        {
+            Execute();
+        }
+
+        private protected abstract void Execute();
     }
 }

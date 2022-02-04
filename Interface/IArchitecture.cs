@@ -20,13 +20,23 @@ namespace Framework.Interface
 
         void SendCommand<T>(T command) where T : ICommand;
 
+        TResult SendQuery<TResult>(IQuery<TResult> query);
+
         IUnregisterHandler RegisterEvent<T>(Action<T> action);
+
+        IUnregisterHandler[] RegisterEvent<T>(params Action<T>[] actions);
 
         IUnregisterHandler RegisterEvent<T, TResult>(Func<T, TResult> func);
 
+        IUnregisterHandler[] RegisterEvent<T, TResult>(params Func<T, TResult>[] functions);
+
         void UnregisterEvent<T>(Action<T> action);
 
+        void UnregisterEvent<T>(params Action<T>[] actions);
+
         void UnregisterEvent<T, TResult>(Func<T, TResult> func);
+
+        void UnregisterEvent<T, TResult>(params Func<T, TResult>[] functions);
 
         void InvokeEvent<T>() where T : new();
 

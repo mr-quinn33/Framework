@@ -17,6 +17,11 @@ namespace Framework.Model
             _architecture = architecture;
         }
 
-        public abstract void Initialization();
+        void IModel.Initialize()
+        {
+            Initialize();
+        }
+
+        private protected abstract void Initialize();
     }
 }

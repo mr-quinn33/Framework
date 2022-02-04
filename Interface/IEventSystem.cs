@@ -6,11 +6,19 @@ namespace Framework.Interface
     {
         IUnregisterHandler Register<T>(Action<T> action);
 
+        IUnregisterHandler[] Register<T>(params Action<T>[] actions);
+
         IUnregisterHandler Register<T, TResult>(Func<T, TResult> func);
+
+        IUnregisterHandler[] Register<T, TResult>(params Func<T, TResult>[] functions);
 
         void Unregister<T>(Action<T> action);
 
+        void Unregister<T>(params Action<T>[] actions);
+
         void Unregister<T, TResult>(Func<T, TResult> func);
+
+        void Unregister<T, TResult>(params Func<T, TResult>[] functions);
 
         void Invoke<T>() where T : new();
 
