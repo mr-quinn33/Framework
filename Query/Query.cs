@@ -21,6 +21,6 @@ namespace Framework.Query
             return Execute();
         }
 
-        private protected abstract T Execute();
+        protected abstract T Execute();
     }
 }

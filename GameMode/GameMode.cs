@@ -176,6 +176,6 @@ namespace Framework.GameMode
             Instances.Add(typeof(T), instance);
         }
 
-        private protected abstract void Initialize();
+        protected abstract void Initialize();
     }
 }

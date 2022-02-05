@@ -22,6 +22,6 @@ namespace Framework.Command
             Execute();
         }
 
-        private protected abstract void Execute();
+        protected abstract void Execute();
     }
 }

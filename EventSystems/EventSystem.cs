@@ -13,7 +13,11 @@ namespace Framework.EventSystems
         {
             var type = typeof(T);
 
-            if (!_registrations.TryGetValue(type, out var value)) _registrations.Add(type, new ActionRegistration<T>());
+            if (!_registrations.TryGetValue(type, out var value))
+            {
+                value = new ActionRegistration<T>();
+                _registrations.Add(type, value);
+            }
 
             if (value is ActionRegistration<T> reg) reg.action += action;
 
@@ -29,7 +33,11 @@ namespace Framework.EventSystems
         {
             var type = typeof(T);
 
-            if (!_registrations.TryGetValue(type, out var value)) _registrations.Add(type, new FuncRegistration<T, TResult>());
+            if (!_registrations.TryGetValue(type, out var value))
+            {
+                value = new FuncRegistration<T, TResult>();
+                _registrations.Add(type, value);
+            }
 
             if (value is FuncRegistration<T, TResult> reg) reg.func += func;
 

@@ -22,6 +22,6 @@ namespace Framework.System
             Initialize();
         }
 
-        private protected abstract void Initialize();
+        protected abstract void Initialize();
     }
 }

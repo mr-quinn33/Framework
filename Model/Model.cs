@@ -22,6 +22,6 @@ namespace Framework.Model
             Initialize();
         }
 
-        private protected abstract void Initialize();
+        protected abstract void Initialize();
     }
 }
