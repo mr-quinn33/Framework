@@ -19,10 +19,5 @@ namespace Framework.Script
         {
             _unregisterHandlers.Add(unregisterHandler);
         }
-
-        public void Add(IEnumerable<IUnregisterHandler> unregisterHandlers)
-        {
-            foreach (var handler in unregisterHandlers) Add(handler);
-        }
     }
 }

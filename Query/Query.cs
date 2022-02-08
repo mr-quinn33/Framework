@@ -1,4 +1,5 @@
 using Framework.Interface;
+using Framework.Interface.Restriction;
 
 namespace Framework.Query
 {
@@ -6,14 +7,14 @@ namespace Framework.Query
     {
         private IArchitecture _architecture;
 
-        public void SetArchitecture(IArchitecture architecture)
-        {
-            _architecture = architecture;
-        }
-
-        public IArchitecture GetArchitecture()
+        IArchitecture IGetArchitecture.GetArchitecture()
         {
             return _architecture;
+        }
+
+        void ISetArchitecture.SetArchitecture(IArchitecture architecture)
+        {
+            _architecture = architecture;
         }
 
         T IQuery<T>.Execute()

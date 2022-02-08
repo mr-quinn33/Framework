@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Framework.Interface;
 using Framework.Script;
 using UnityEngine;
@@ -12,13 +11,6 @@ namespace Framework.Extension
             if (!gameObject.TryGetComponent(out UnregisterOnDestroy unregisterOnDestroy)) unregisterOnDestroy = gameObject.AddComponent<UnregisterOnDestroy>();
 
             unregisterOnDestroy.Add(unregisterHandler);
-        }
-
-        public static void UnregisterOnGameObjectDestroyed(this IEnumerable<IUnregisterHandler> unregisterHandlers, GameObject gameObject)
-        {
-            if (!gameObject.TryGetComponent(out UnregisterOnDestroy unregisterOnDestroy)) unregisterOnDestroy = gameObject.AddComponent<UnregisterOnDestroy>();
-
-            unregisterOnDestroy.Add(unregisterHandlers);
         }
     }
 }

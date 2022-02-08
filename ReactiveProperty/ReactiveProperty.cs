@@ -18,9 +18,7 @@ namespace Framework.ReactiveProperty
             set
             {
                 if (value == null && _value == null) return;
-
-                if (value != null && _value.Equals(value)) return;
-
+                if (value != null && value.Equals(_value)) return;
                 _value = value;
                 OnValueChanged?.Invoke(_value);
             }

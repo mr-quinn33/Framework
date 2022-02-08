@@ -1,7 +1,7 @@
 using System;
 using Framework.Interface;
 
-namespace Framework.EventSystems
+namespace Framework.EventSystem
 {
     public class FuncRegistration<T, TResult> : IRegistration
     {

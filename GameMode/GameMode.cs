@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Framework.EventSystems;
+using System.Threading;
+using System.Threading.Tasks;
 using Framework.Interface;
 using Framework.IOC;
 
@@ -8,46 +9,42 @@ namespace Framework.GameMode
 {
     public abstract class GameMode<T> : GameModeBase where T : GameMode<T>, new()
     {
-        private readonly EventSystem _eventSystem = new();
+        private readonly EventSystem.EventSystem _eventSystem = new();
         private readonly IOCContainer _iocContainer = new();
         private readonly List<IModel> _models = new();
         private readonly List<ISystem> _systems = new();
 
         private static bool Initialized => Instances.TryGetValue(typeof(T), out var value) && value != null;
 
-        public static IArchitecture Load()
+        public static T Load()
         {
             if (!Initialized) MakeSureArchitecture();
-
-            return Instances[typeof(T)];
+            return Instances[typeof(T)] as T;
         }
 
         public static void Unload()
         {
             if (!Initialized) return;
-
             if (!Instances.Remove(typeof(T))) Instances.Clear();
         }
 
-        public override void RegisterSystem<TSystem>(TSystem system)
+        protected void RegisterSystem<TSystem>(TSystem system) where TSystem : class, ISystem
         {
             system.SetArchitecture(this);
             _iocContainer.Set(system);
-
             if (Initialized) system.Initialize();
             else _systems.Add(system);
         }
 
-        public override void RegisterModel<TModel>(TModel model)
+        protected void RegisterModel<TModel>(TModel model) where TModel : class, IModel
         {
             model.SetArchitecture(this);
             _iocContainer.Set(model);
-
             if (Initialized) model.Initialize();
             else _models.Add(model);
         }
 
-        public override void RegisterUtility<TUtility>(TUtility utility)
+        protected void RegisterUtility<TUtility>(TUtility utility) where TUtility : class, IUtility
         {
             _iocContainer.Set(utility);
         }
@@ -67,6 +64,13 @@ namespace Framework.GameMode
             return _iocContainer.Get<TUtility>();
         }
 
+        public override void SendCommand<TCommand>(TCommand command)
+        {
+            command.SetArchitecture(this);
+            command.Execute();
+            command.SetArchitecture(null);
+        }
+
         public override void SendCommand<TCommand>()
         {
             var command = new TCommand();
@@ -75,15 +79,85 @@ namespace Framework.GameMode
             command.SetArchitecture(null);
         }
 
-        public override void SendCommand<TCommand>(TCommand command)
+        public override async Task SendCommandAsync<TCommand>(TCommand command)
         {
             command.SetArchitecture(this);
-            command.Execute();
+            await command.ExecuteAsync();
             command.SetArchitecture(null);
+        }
+
+        public override async Task SendCommandAsync<TCommand>()
+        {
+            var command = new TCommand();
+            command.SetArchitecture(this);
+            await command.ExecuteAsync();
+            command.SetArchitecture(null);
+        }
+
+        public override async Task<TResult> SendCommandAsync<TCommand, TResult>(TCommand command)
+        {
+            command.SetArchitecture(this);
+            var task = command.ExecuteAsync();
+            await task;
+            command.SetArchitecture(null);
+            return task.Result;
+        }
+
+        public override async Task<TResult> SendCommandAsync<TCommand, TResult>()
+        {
+            var command = new TCommand();
+            command.SetArchitecture(this);
+            var task = command.ExecuteAsync();
+            await task;
+            command.SetArchitecture(null);
+            return task.Result;
+        }
+
+        public override async Task SendCommandAsync<TCommand>(TCommand command, CancellationTokenSource source)
+        {
+            command.SetArchitecture(this);
+            await command.ExecuteAsync(source);
+            command.SetArchitecture(null);
+        }
+
+        public override async Task SendCommandAsync<TCommand>(CancellationTokenSource source)
+        {
+            var command = new TCommand();
+            command.SetArchitecture(this);
+            await command.ExecuteAsync(source);
+            command.SetArchitecture(null);
+        }
+
+        public override async Task<TResult> SendCommandAsync<TCommand, TResult>(TCommand command, CancellationTokenSource source)
+        {
+            command.SetArchitecture(this);
+            var task = command.ExecuteAsync(source);
+            await task;
+            command.SetArchitecture(null);
+            return task.Result;
+        }
+
+        public override async Task<TResult> SendCommandAsync<TCommand, TResult>(CancellationTokenSource source)
+        {
+            var command = new TCommand();
+            command.SetArchitecture(this);
+            var task = command.ExecuteAsync(source);
+            await task;
+            command.SetArchitecture(null);
+            return task.Result;
         }
 
         public override TResult SendQuery<TResult>(IQuery<TResult> query)
         {
+            query.SetArchitecture(this);
+            var result = query.Execute();
+            query.SetArchitecture(null);
+            return result;
+        }
+
+        public override TResult SendQuery<TQuery, TResult>()
+        {
+            var query = new TQuery();
             query.SetArchitecture(this);
             var result = query.Execute();
             query.SetArchitecture(null);
@@ -95,19 +169,9 @@ namespace Framework.GameMode
             return _eventSystem.Register(action);
         }
 
-        public override IUnregisterHandler[] RegisterEvent<TEvent>(params Action<TEvent>[] actions)
-        {
-            return _eventSystem.Register(actions);
-        }
-
         public override IUnregisterHandler RegisterEvent<TEvent, TResult>(Func<TEvent, TResult> func)
         {
             return _eventSystem.Register(func);
-        }
-
-        public override IUnregisterHandler[] RegisterEvent<T1, TResult>(params Func<T1, TResult>[] functions)
-        {
-            return _eventSystem.Register(functions);
         }
 
         public override void UnregisterEvent<TEvent>(Action<TEvent> action)
@@ -115,34 +179,9 @@ namespace Framework.GameMode
             _eventSystem.Unregister(action);
         }
 
-        public override void UnregisterEvent<T1>(params Action<T1>[] actions)
-        {
-            _eventSystem.Unregister(actions);
-        }
-
         public override void UnregisterEvent<TEvent, TResult>(Func<TEvent, TResult> func)
         {
             _eventSystem.Unregister(func);
-        }
-
-        public override void UnregisterEvent<T1, TResult>(params Func<T1, TResult>[] functions)
-        {
-            _eventSystem.Unregister(functions);
-        }
-
-        public override void InvokeEvent<TEvent>()
-        {
-            _eventSystem.Invoke<TEvent>();
-        }
-
-        public override void InvokeEvent<TEvent, TResult>(out TResult result)
-        {
-            _eventSystem.Invoke<TEvent, TResult>(out result);
-        }
-
-        public override TResult InvokeEvent<TEvent, TResult>()
-        {
-            return _eventSystem.Invoke<TEvent, TResult>();
         }
 
         public override void InvokeEvent<TEvent>(TEvent t)
@@ -150,27 +189,28 @@ namespace Framework.GameMode
             _eventSystem.Invoke(t);
         }
 
-        public override void InvokeEvent<TEvent, TResult>(TEvent t, out TResult result)
+        public override void InvokeEvent<TEvent>()
         {
-            _eventSystem.Invoke(t, out result);
+            _eventSystem.Invoke<TEvent>();
         }
 
         public override TResult InvokeEvent<TEvent, TResult>(TEvent t)
         {
             return _eventSystem.Invoke<TEvent, TResult>(t);
         }
-        
+
+        public override TResult InvokeEvent<TEvent, TResult>()
+        {
+            return _eventSystem.Invoke<TEvent, TResult>();
+        }
+
         private static void MakeSureArchitecture()
         {
             if (Initialized) return;
-            
             var instance = new T();
             instance.Initialize();
-            
             foreach (var model in instance._models) model.Initialize();
-
             foreach (var system in instance._systems) system.Initialize();
-
             instance._models.Clear();
             instance._systems.Clear();
             Instances.Add(typeof(T), instance);

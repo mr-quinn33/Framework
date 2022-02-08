@@ -10,7 +10,6 @@ namespace Framework.IOC
         public void Set<T>(T instance) where T : class
         {
             var type = typeof(T);
-
             if (_instances.ContainsKey(type)) _instances[type] = instance;
             else _instances.Add(type, instance);
         }
@@ -18,7 +17,6 @@ namespace Framework.IOC
         public T Get<T>() where T : class
         {
             if (_instances.TryGetValue(typeof(T), out var value)) return value as T;
-
             return null;
         }
     }
