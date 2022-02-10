@@ -1,20 +1,20 @@
 using Framework.Interface;
-using Framework.Interface.Restriction;
+using Framework.Interface.Access;
 
 namespace Framework.Query
 {
     public abstract class Query<T> : IQuery<T>
     {
-        private IArchitecture _architecture;
+        private IArchitecture architecture;
 
         IArchitecture IGetArchitecture.GetArchitecture()
         {
-            return _architecture;
+            return architecture;
         }
 
-        void ISetArchitecture.SetArchitecture(IArchitecture architecture)
+        void ISetArchitecture.SetArchitecture(IArchitecture iArchitecture)
         {
-            _architecture = architecture;
+            architecture = iArchitecture;
         }
 
         T IQuery<T>.Execute()

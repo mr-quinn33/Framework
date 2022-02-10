@@ -6,18 +6,17 @@ namespace Framework.Script
 {
     public class UnregisterOnDestroy : MonoBehaviour
     {
-        private readonly HashSet<IUnregisterHandler> _unregisterHandlers = new();
+        private readonly HashSet<IUnregisterHandler> unregisterHandlers = new();
 
         private void OnDestroy()
         {
-            foreach (var unregisterHandler in _unregisterHandlers) unregisterHandler.Unregister();
-
-            _unregisterHandlers.Clear();
+            foreach (var unregisterHandler in unregisterHandlers) unregisterHandler.Unregister();
+            unregisterHandlers.Clear();
         }
 
         public void Add(IUnregisterHandler unregisterHandler)
         {
-            _unregisterHandlers.Add(unregisterHandler);
+            unregisterHandlers.Add(unregisterHandler);
         }
     }
 }

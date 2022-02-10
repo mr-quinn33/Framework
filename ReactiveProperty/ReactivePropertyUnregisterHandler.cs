@@ -5,20 +5,20 @@ namespace Framework.ReactiveProperty
 {
     public class ReactivePropertyUnregisterHandler<T> : IUnregisterHandler
     {
-        private Action<T> _action;
-        private ReactiveProperty<T> _reactiveProperty;
+        private Action<T> action;
+        private ReactiveProperty<T> reactiveProperty;
 
         public ReactivePropertyUnregisterHandler(ReactiveProperty<T> reactiveProperty, Action<T> action)
         {
-            _reactiveProperty = reactiveProperty;
-            _action = action;
+            this.reactiveProperty = reactiveProperty;
+            this.action = action;
         }
 
         public void Unregister()
         {
-            _reactiveProperty.Unregister(_action);
-            _reactiveProperty = null;
-            _action = null;
+            reactiveProperty.Unregister(action);
+            reactiveProperty = null;
+            action = null;
         }
     }
 }

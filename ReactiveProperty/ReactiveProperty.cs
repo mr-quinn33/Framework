@@ -3,24 +3,25 @@ using Framework.Interface;
 
 namespace Framework.ReactiveProperty
 {
+    [Serializable]
     public class ReactiveProperty<T>
     {
-        private T _value;
+        private T value;
 
         public ReactiveProperty(T value = default)
         {
-            _value = value;
+            this.value = value;
         }
 
         public T Value
         {
-            get => _value;
+            get => value;
             set
             {
-                if (value == null && _value == null) return;
-                if (value != null && value.Equals(_value)) return;
-                _value = value;
-                OnValueChanged?.Invoke(_value);
+                if (value == null && this.value == null) return;
+                if (value != null && value.Equals(this.value)) return;
+                this.value = value;
+                OnValueChanged?.Invoke(this.value);
             }
         }
 
@@ -39,12 +40,12 @@ namespace Framework.ReactiveProperty
 
         public override string ToString()
         {
-            return _value.ToString();
+            return value.ToString();
         }
 
         public static implicit operator T(ReactiveProperty<T> reactiveProperty)
         {
-            return reactiveProperty._value;
+            return reactiveProperty.value;
         }
     }
 }

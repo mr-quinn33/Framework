@@ -5,20 +5,20 @@ namespace Framework.EventSystem
 {
     public class FuncUnregisterHandler<T, TResult> : IUnregisterHandler
     {
-        private IEventSystem _eventSystem;
-        private Func<T, TResult> _func;
+        private IEventSystem eventSystem;
+        private Func<T, TResult> func;
 
         public FuncUnregisterHandler(IEventSystem eventSystem, Func<T, TResult> func)
         {
-            _eventSystem = eventSystem;
-            _func = func;
+            this.eventSystem = eventSystem;
+            this.func = func;
         }
 
         public void Unregister()
         {
-            _eventSystem.Unregister(_func);
-            _eventSystem = null;
-            _func = null;
+            eventSystem.Unregister(func);
+            eventSystem = null;
+            func = null;
         }
     }
 }

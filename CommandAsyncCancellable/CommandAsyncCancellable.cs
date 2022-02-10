@@ -2,22 +2,22 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Framework.Interface;
-using Framework.Interface.Restriction;
+using Framework.Interface.Access;
 
 namespace Framework.CommandAsyncCancellable
 {
     public abstract class CommandAsyncCancellable : ICommandAsyncCancellable
     {
-        private IArchitecture _architecture;
+        private IArchitecture architecture;
 
         IArchitecture IGetArchitecture.GetArchitecture()
         {
-            return _architecture;
+            return architecture;
         }
 
-        void ISetArchitecture.SetArchitecture(IArchitecture architecture)
+        void ISetArchitecture.SetArchitecture(IArchitecture iArchitecture)
         {
-            _architecture = architecture;
+            architecture = iArchitecture;
         }
 
         async Task ICommandAsyncCancellable.ExecuteAsync(CancellationTokenSource source)
@@ -38,25 +38,25 @@ namespace Framework.CommandAsyncCancellable
 
         protected abstract Task ExecuteAsync(CancellationToken token);
     }
-    
+
     public abstract class CommandAsyncCancellable<T> : ICommandAsyncCancellable<T>
     {
-        private IArchitecture _architecture;
-        
+        private IArchitecture architecture;
+
         IArchitecture IGetArchitecture.GetArchitecture()
         {
-            return _architecture;
+            return architecture;
         }
 
-        void ISetArchitecture.SetArchitecture(IArchitecture architecture)
+        void ISetArchitecture.SetArchitecture(IArchitecture iArchitecture)
         {
-            _architecture = architecture;
+            architecture = iArchitecture;
         }
 
         async Task<T> ICommandAsyncCancellable<T>.ExecuteAsync(CancellationTokenSource source)
         {
             var task = ExecuteAsync(source.Token);
-            
+
             try
             {
                 await task;
@@ -69,10 +69,10 @@ namespace Framework.CommandAsyncCancellable
             {
                 source.Dispose();
             }
-            
+
             return task.Result;
         }
-        
+
         protected abstract Task<T> ExecuteAsync(CancellationToken token);
     }
 }

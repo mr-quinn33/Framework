@@ -1,4 +1,4 @@
-namespace Framework.Interface.Restriction
+namespace Framework.Interface.Access
 {
     public interface IUnregisterEvent : IGetArchitecture
     {

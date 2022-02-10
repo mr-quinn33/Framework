@@ -1,6 +1,6 @@
 using System;
 using Framework.Interface;
-using Framework.Interface.Restriction;
+using Framework.Interface.Access;
 
 namespace Framework.Extension
 {

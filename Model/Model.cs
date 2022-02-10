@@ -1,20 +1,20 @@
 using Framework.Interface;
-using Framework.Interface.Restriction;
+using Framework.Interface.Access;
 
 namespace Framework.Model
 {
     public abstract class Model : IModel
     {
-        private IArchitecture _architecture;
+        private IArchitecture architecture;
 
         IArchitecture IGetArchitecture.GetArchitecture()
         {
-            return _architecture;
+            return architecture;
         }
 
-        void ISetArchitecture.SetArchitecture(IArchitecture architecture)
+        void ISetArchitecture.SetArchitecture(IArchitecture iArchitecture)
         {
-            _architecture = architecture;
+            architecture = iArchitecture;
         }
 
         void IModel.Initialize()

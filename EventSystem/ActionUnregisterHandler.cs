@@ -5,20 +5,20 @@ namespace Framework.EventSystem
 {
     public class ActionUnregisterHandler<T> : IUnregisterHandler
     {
-        private Action<T> _action;
-        private IEventSystem _eventSystem;
+        private Action<T> action;
+        private IEventSystem eventSystem;
 
         public ActionUnregisterHandler(IEventSystem eventSystem, Action<T> action)
         {
-            _action = action;
-            _eventSystem = eventSystem;
+            this.action = action;
+            this.eventSystem = eventSystem;
         }
 
         public void Unregister()
         {
-            _eventSystem.Unregister(_action);
-            _eventSystem = null;
-            _action = null;
+            eventSystem.Unregister(action);
+            eventSystem = null;
+            action = null;
         }
     }
 }
