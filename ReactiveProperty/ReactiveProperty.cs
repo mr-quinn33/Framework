@@ -3,7 +3,6 @@ using Framework.Interface;
 
 namespace Framework.ReactiveProperty
 {
-    [Serializable]
     public class ReactiveProperty<T>
     {
         private T value;

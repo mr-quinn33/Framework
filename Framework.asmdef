@@ -1,3 +1,16 @@
 {
-  "name": "Framework"
+  "name": "Framework",
+  "rootNamespace": "",
+  "references": [
+    "IOC"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
 }
