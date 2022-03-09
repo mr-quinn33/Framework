@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Framework.Interface;
 using Framework.Interface.Access;
 
-namespace Framework.CommandAsync
+namespace Framework.Command
 {
     public abstract class CommandAsync : ICommandAsync
     {

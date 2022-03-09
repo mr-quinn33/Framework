@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Framework.Interface;
 using Framework.Interface.Access;
 
-namespace Framework.CommandAsyncCancellable
+namespace Framework.Command
 {
     public abstract class CommandAsyncCancellable : ICommandAsyncCancellable
     {
