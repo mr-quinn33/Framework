@@ -177,6 +177,16 @@ namespace Framework.GameMode
             return eventSystem.Invoke<TEvent, TResult>();
         }
 
+        public void RegisterDependency<TDependency>(object dependency)
+        {
+            iocContainer.Register<TDependency>(dependency);
+        }
+
+        public void InjectDependency<TDependency>(object instance)
+        {
+            iocContainer.Inject<TDependency>(instance);
+        }
+
         public static T Load()
         {
             if (!Initialized) MakeSureArchitecture();
@@ -186,7 +196,7 @@ namespace Framework.GameMode
         public static void Unload()
         {
             if (!Initialized) return;
-            if (!Instances.Remove(typeof(T))) Instances.Clear();
+            if (!Instances.Remove(typeof(T))) throw new KeyNotFoundException();
         }
 
         protected void RegisterSystem<TSystem>(TSystem system) where TSystem : class, ISystem

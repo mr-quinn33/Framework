@@ -20,7 +20,6 @@ namespace Framework.IOC
         public void Register<T>(object instance)
         {
             var type = typeof(T);
-
             if (registeredInstances.ContainsKey(type))
                 registeredInstances[type] = instance;
             else
@@ -31,7 +30,6 @@ namespace Framework.IOC
         {
             var parentType = typeof(TParent);
             var childType = typeof(TChild);
-
             if (registeredDependencies.ContainsKey(parentType))
                 registeredDependencies[parentType] = childType;
             else
@@ -63,9 +61,7 @@ namespace Framework.IOC
         private object Resolve(Type type)
         {
             if (registeredInstances.ContainsKey(type)) return registeredInstances[type];
-
             if (registeredTypes.Contains(type)) return Activator.CreateInstance(type);
-
             return registeredDependencies.ContainsKey(type)
                 ? Activator.CreateInstance(registeredDependencies[type])
                 : default;

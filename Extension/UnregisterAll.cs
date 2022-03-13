@@ -6,11 +6,7 @@ namespace Framework.Extension
     {
         public static void UnregisterAll(this IUnregisterHandlerCollection self)
         {
-            foreach (var unregisterHandler in self.UnregisterHandlers)
-            {
-                unregisterHandler.Unregister();
-            }
-            
+            foreach (var unregisterHandler in self.UnregisterHandlers) unregisterHandler.Unregister();
             self.UnregisterHandlers.Clear();
         }
     }

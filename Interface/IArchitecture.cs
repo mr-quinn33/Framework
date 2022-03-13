@@ -53,5 +53,9 @@ namespace Framework.Interface
         TResult InvokeEvent<T, TResult>(T t);
 
         TResult InvokeEvent<T, TResult>() where T : new();
+
+        void RegisterDependency<TDependency>(object dependency);
+
+        void InjectDependency<TDependency>(object instance);
     }
 }

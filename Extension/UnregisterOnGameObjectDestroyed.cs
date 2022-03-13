@@ -11,7 +11,6 @@ namespace Framework.Extension
         {
             if (!gameObject.TryGetComponent(out UnregisterOnDestroy unregisterOnDestroy))
                 unregisterOnDestroy = gameObject.AddComponent<UnregisterOnDestroy>();
-
             unregisterOnDestroy.Add(unregisterHandler);
         }
     }

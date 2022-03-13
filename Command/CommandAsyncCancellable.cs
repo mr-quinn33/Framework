@@ -56,7 +56,6 @@ namespace Framework.Command
         async Task<T> ICommandAsyncCancellable<T>.ExecuteAsync(CancellationTokenSource source)
         {
             var task = ExecuteAsync(source.Token);
-
             try
             {
                 await task;
