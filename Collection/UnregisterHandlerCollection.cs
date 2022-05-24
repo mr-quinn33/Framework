@@ -5,11 +5,11 @@ namespace Framework.Collection
 {
     public class UnregisterHandlerList : IUnregisterHandlerCollection
     {
-        public ICollection<IUnregisterHandler> UnregisterHandlers { get; } = new List<IUnregisterHandler>();
+        ICollection<IUnregisterHandler> IUnregisterHandlerCollection.UnregisterHandlers { get; } = new List<IUnregisterHandler>();
     }
-    
+
     public class UnregisterHandlerHashSet : IUnregisterHandlerCollection
     {
-        public ICollection<IUnregisterHandler> UnregisterHandlers { get; } = new HashSet<IUnregisterHandler>();
+        ICollection<IUnregisterHandler> IUnregisterHandlerCollection.UnregisterHandlers { get; } = new HashSet<IUnregisterHandler>();
     }
 }

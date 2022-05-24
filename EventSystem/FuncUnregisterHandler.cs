@@ -14,7 +14,7 @@ namespace Framework.EventSystem
             this.func = func;
         }
 
-        public void Unregister()
+        void IUnregisterHandler.Unregister()
         {
             eventSystem.Unregister(func);
             eventSystem = null;

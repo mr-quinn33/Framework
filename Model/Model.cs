@@ -12,9 +12,9 @@ namespace Framework.Model
             return architecture;
         }
 
-        void ISetArchitecture.SetArchitecture(IArchitecture iArchitecture)
+        void ISetArchitecture.SetArchitecture(IArchitecture architecture)
         {
-            architecture = iArchitecture;
+            this.architecture = architecture;
         }
 
         void IModel.Initialize()

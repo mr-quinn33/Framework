@@ -8,50 +8,45 @@ namespace Framework.IOC
 {
     public class IOCContainer : IIOCContainer
     {
-        private readonly Dictionary<Type, Type> registeredDependencies = new();
-        private readonly Dictionary<Type, object> registeredInstances = new();
-        private readonly HashSet<Type> registeredTypes = new();
+        private readonly ICollection<Type> registeredTypes = new HashSet<Type>();
+        private readonly IDictionary<Type, Type> registeredDependencies = new Dictionary<Type, Type>();
+        private readonly IDictionary<Type, object> registeredInstances = new Dictionary<Type, object>();
 
-        public void Register<T>()
+        void IIOCContainer.Register<T>()
         {
             registeredTypes.Add(typeof(T));
         }
 
-        public void Register<T>(object instance)
+        void IIOCContainer.Register<T>(object instance)
         {
             var type = typeof(T);
-            if (registeredInstances.ContainsKey(type))
-                registeredInstances[type] = instance;
-            else
-                registeredInstances.Add(type, instance);
+            if (registeredInstances.ContainsKey(type)) registeredInstances[type] = instance;
+            else registeredInstances.Add(type, instance);
         }
 
-        public void Register<TParent, TChild>() where TChild : TParent
+        void IIOCContainer.Register<TParent, TChild>()
         {
             var parentType = typeof(TParent);
             var childType = typeof(TChild);
-            if (registeredDependencies.ContainsKey(parentType))
-                registeredDependencies[parentType] = childType;
-            else
-                registeredDependencies.Add(parentType, childType);
+            if (registeredDependencies.ContainsKey(parentType)) registeredDependencies[parentType] = childType;
+            else registeredDependencies.Add(parentType, childType);
         }
 
-        public T Resolve<T>()
+        T IIOCContainer.Resolve<T>()
         {
             return (T) Resolve(typeof(T));
         }
 
-        public void Inject<T>(object obj)
+        void IIOCContainer.Inject<T>(object obj)
         {
-            foreach (var propertyInfo in obj.GetType().GetProperties()
-                         .Where(p => p.GetCustomAttributes(typeof(InjectAttribute), true).Length > 0))
+            foreach (var propertyInfo in obj.GetType().GetProperties().Where(p => p.GetCustomAttributes(typeof(InjectAttribute), true).Length > 0))
             {
                 var value = Resolve(propertyInfo.PropertyType);
                 if (value != null) propertyInfo.SetValue(obj, value);
             }
         }
 
-        public void Clear()
+        void IIOCContainer.Clear()
         {
             registeredDependencies.Clear();
             registeredInstances.Clear();
@@ -62,9 +57,7 @@ namespace Framework.IOC
         {
             if (registeredInstances.ContainsKey(type)) return registeredInstances[type];
             if (registeredTypes.Contains(type)) return Activator.CreateInstance(type);
-            return registeredDependencies.ContainsKey(type)
-                ? Activator.CreateInstance(registeredDependencies[type])
-                : default;
+            return registeredDependencies.ContainsKey(type) ? Activator.CreateInstance(registeredDependencies[type]) : default;
         }
     }
 }

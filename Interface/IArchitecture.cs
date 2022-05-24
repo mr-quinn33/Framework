@@ -28,11 +28,9 @@ namespace Framework.Interface
 
         Task SendCommandAsync<T>(CancellationTokenSource source) where T : ICommandAsyncCancellable, new();
 
-        Task<TResult> SendCommandAsync<T, TResult>(T command, CancellationTokenSource source)
-            where T : ICommandAsyncCancellable<TResult>;
+        Task<TResult> SendCommandAsync<T, TResult>(T command, CancellationTokenSource source) where T : ICommandAsyncCancellable<TResult>;
 
-        Task<TResult> SendCommandAsync<T, TResult>(CancellationTokenSource source)
-            where T : ICommandAsyncCancellable<TResult>, new();
+        Task<TResult> SendCommandAsync<T, TResult>(CancellationTokenSource source) where T : ICommandAsyncCancellable<TResult>, new();
 
         TResult SendQuery<TResult>(IQuery<TResult> query);
 
@@ -56,6 +54,12 @@ namespace Framework.Interface
 
         void RegisterDependency<TDependency>(object dependency);
 
-        void InjectDependency<TDependency>(object instance);
+        TDependency ResolveDependency<TDependency>();
+
+        void InjectDependency<TDependency>(object obj);
+
+        void SendCommandObject<T>(T eventObject) where T : ICommandObject;
+
+        bool CheckCondition<T>(T condition) where T : ICondition;
     }
 }

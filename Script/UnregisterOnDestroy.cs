@@ -6,7 +6,7 @@ namespace Framework.Script
 {
     public class UnregisterOnDestroy : MonoBehaviour
     {
-        private readonly HashSet<IUnregisterHandler> unregisterHandlers = new();
+        private readonly ICollection<IUnregisterHandler> unregisterHandlers = new HashSet<IUnregisterHandler>();
 
         private void OnDestroy()
         {

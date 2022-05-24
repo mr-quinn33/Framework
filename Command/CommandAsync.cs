@@ -13,9 +13,9 @@ namespace Framework.Command
             return architecture;
         }
 
-        void ISetArchitecture.SetArchitecture(IArchitecture iArchitecture)
+        void ISetArchitecture.SetArchitecture(IArchitecture architecture)
         {
-            architecture = iArchitecture;
+            this.architecture = architecture;
         }
 
         async Task ICommandAsync.ExecuteAsync()
@@ -35,9 +35,9 @@ namespace Framework.Command
             return architecture;
         }
 
-        void ISetArchitecture.SetArchitecture(IArchitecture iArchitecture)
+        void ISetArchitecture.SetArchitecture(IArchitecture architecture)
         {
-            architecture = iArchitecture;
+            this.architecture = architecture;
         }
 
         async Task<T> ICommandAsync<T>.ExecuteAsync()

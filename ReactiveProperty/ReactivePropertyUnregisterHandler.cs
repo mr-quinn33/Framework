@@ -1,20 +1,21 @@
 using System;
 using Framework.Interface;
+using Framework.ReactiveProperty.Interface;
 
 namespace Framework.ReactiveProperty
 {
     public class ReactivePropertyUnregisterHandler<T> : IUnregisterHandler
     {
+        private IReactiveProperty<T> reactiveProperty;
         private Action<T> action;
-        private ReactiveProperty<T> reactiveProperty;
 
-        public ReactivePropertyUnregisterHandler(ReactiveProperty<T> reactiveProperty, Action<T> action)
+        public ReactivePropertyUnregisterHandler(IReactiveProperty<T> reactiveProperty, Action<T> action)
         {
             this.reactiveProperty = reactiveProperty;
             this.action = action;
         }
 
-        public void Unregister()
+        void IUnregisterHandler.Unregister()
         {
             reactiveProperty.Unregister(action);
             reactiveProperty = null;

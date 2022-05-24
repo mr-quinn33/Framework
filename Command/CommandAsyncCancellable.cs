@@ -15,9 +15,9 @@ namespace Framework.Command
             return architecture;
         }
 
-        void ISetArchitecture.SetArchitecture(IArchitecture iArchitecture)
+        void ISetArchitecture.SetArchitecture(IArchitecture architecture)
         {
-            architecture = iArchitecture;
+            this.architecture = architecture;
         }
 
         async Task ICommandAsyncCancellable.ExecuteAsync(CancellationTokenSource source)
@@ -48,14 +48,15 @@ namespace Framework.Command
             return architecture;
         }
 
-        void ISetArchitecture.SetArchitecture(IArchitecture iArchitecture)
+        void ISetArchitecture.SetArchitecture(IArchitecture architecture)
         {
-            architecture = iArchitecture;
+            this.architecture = architecture;
         }
 
         async Task<T> ICommandAsyncCancellable<T>.ExecuteAsync(CancellationTokenSource source)
         {
             var task = ExecuteAsync(source.Token);
+
             try
             {
                 await task;

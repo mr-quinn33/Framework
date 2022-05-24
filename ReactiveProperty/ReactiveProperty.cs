@@ -1,18 +1,21 @@
 using System;
 using Framework.Interface;
+using Framework.ReactiveProperty.Interface;
 
 namespace Framework.ReactiveProperty
 {
-    public class ReactiveProperty<T>
+    public class ReactiveProperty<T> : IReactiveProperty<T>
     {
         private T value;
+
+        private event Action<T> OnValueChanged;
 
         public ReactiveProperty(T value = default)
         {
             this.value = value;
         }
 
-        public T Value
+        T IReactiveProperty<T>.Value
         {
             get => value;
             set
@@ -24,15 +27,13 @@ namespace Framework.ReactiveProperty
             }
         }
 
-        private event Action<T> OnValueChanged;
-
-        public IUnregisterHandler Register(Action<T> action)
+        IUnregisterHandler IReactiveProperty<T>.Register(Action<T> action)
         {
             OnValueChanged += action;
             return new ReactivePropertyUnregisterHandler<T>(this, action);
         }
 
-        public void Unregister(Action<T> action)
+        void IReactiveProperty<T>.Unregister(Action<T> action)
         {
             OnValueChanged -= action;
         }

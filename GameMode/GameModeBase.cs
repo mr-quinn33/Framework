@@ -6,6 +6,6 @@ namespace Framework.GameMode
 {
     public abstract class GameModeBase
     {
-        private protected static readonly Dictionary<Type, IArchitecture> Instances = new();
+        private protected static readonly IDictionary<Type, IArchitecture> Instances = new Dictionary<Type, IArchitecture>();
     }
 }

@@ -10,36 +10,36 @@ namespace Framework.GameMode
 {
     public abstract class GameMode<T> : GameModeBase, IArchitecture where T : GameMode<T>, new()
     {
-        private readonly IEventSystem eventSystem = new EventSystem.EventSystem();
         private readonly IIOCContainer iocContainer = new IOCContainer();
-        private readonly List<IModel> models = new();
-        private readonly List<ISystem> systems = new();
+        private readonly ICollection<IModel> models = new List<IModel>();
+        private readonly ICollection<ISystem> systems = new List<ISystem>();
+        private readonly IEventSystem eventSystem = new EventSystem.EventSystem();
 
         private static bool Initialized => Instances.TryGetValue(typeof(T), out var value) && value != null;
 
-        public TSystem GetSystem<TSystem>() where TSystem : class, ISystem
+        TSystem IArchitecture.GetSystem<TSystem>() where TSystem : class
         {
             return iocContainer.Resolve<TSystem>();
         }
 
-        public TModel GetModel<TModel>() where TModel : class, IModel
+        TModel IArchitecture.GetModel<TModel>() where TModel : class
         {
             return iocContainer.Resolve<TModel>();
         }
 
-        public TUtility GetUtility<TUtility>() where TUtility : class, IUtility
+        TUtility IArchitecture.GetUtility<TUtility>() where TUtility : class
         {
             return iocContainer.Resolve<TUtility>();
         }
 
-        public void SendCommand<TCommand>(TCommand command) where TCommand : ICommand
+        void IArchitecture.SendCommand<TCommand>(TCommand command)
         {
             command.SetArchitecture(this);
             command.Execute();
             command.SetArchitecture(null);
         }
 
-        public void SendCommand<TCommand>() where TCommand : ICommand, new()
+        void IArchitecture.SendCommand<TCommand>()
         {
             var command = new TCommand();
             command.SetArchitecture(this);
@@ -47,14 +47,14 @@ namespace Framework.GameMode
             command.SetArchitecture(null);
         }
 
-        public async Task SendCommandAsync<TCommand>(TCommand command) where TCommand : ICommandAsync
+        async Task IArchitecture.SendCommandAsync<TCommand>(TCommand command)
         {
             command.SetArchitecture(this);
             await command.ExecuteAsync();
             command.SetArchitecture(null);
         }
 
-        public async Task SendCommandAsync<TCommand>() where TCommand : ICommandAsync, new()
+        async Task IArchitecture.SendCommandAsync<TCommand>()
         {
             var command = new TCommand();
             command.SetArchitecture(this);
@@ -62,8 +62,7 @@ namespace Framework.GameMode
             command.SetArchitecture(null);
         }
 
-        public async Task<TResult> SendCommandAsync<TCommand, TResult>(TCommand command)
-            where TCommand : ICommandAsync<TResult>
+        async Task<TResult> IArchitecture.SendCommandAsync<TCommand, TResult>(TCommand command)
         {
             command.SetArchitecture(this);
             var task = command.ExecuteAsync();
@@ -72,7 +71,7 @@ namespace Framework.GameMode
             return task.Result;
         }
 
-        public async Task<TResult> SendCommandAsync<TCommand, TResult>() where TCommand : ICommandAsync<TResult>, new()
+        async Task<TResult> IArchitecture.SendCommandAsync<TCommand, TResult>()
         {
             var command = new TCommand();
             command.SetArchitecture(this);
@@ -82,16 +81,14 @@ namespace Framework.GameMode
             return task.Result;
         }
 
-        public async Task SendCommandAsync<TCommand>(TCommand command, CancellationTokenSource source)
-            where TCommand : ICommandAsyncCancellable
+        async Task IArchitecture.SendCommandAsync<TCommand>(TCommand command, CancellationTokenSource source)
         {
             command.SetArchitecture(this);
             await command.ExecuteAsync(source);
             command.SetArchitecture(null);
         }
 
-        public async Task SendCommandAsync<TCommand>(CancellationTokenSource source)
-            where TCommand : ICommandAsyncCancellable, new()
+        async Task IArchitecture.SendCommandAsync<TCommand>(CancellationTokenSource source)
         {
             var command = new TCommand();
             command.SetArchitecture(this);
@@ -99,8 +96,7 @@ namespace Framework.GameMode
             command.SetArchitecture(null);
         }
 
-        public async Task<TResult> SendCommandAsync<TCommand, TResult>(TCommand command, CancellationTokenSource source)
-            where TCommand : ICommandAsyncCancellable<TResult>
+        async Task<TResult> IArchitecture.SendCommandAsync<TCommand, TResult>(TCommand command, CancellationTokenSource source)
         {
             command.SetArchitecture(this);
             var task = command.ExecuteAsync(source);
@@ -109,8 +105,7 @@ namespace Framework.GameMode
             return task.Result;
         }
 
-        public async Task<TResult> SendCommandAsync<TCommand, TResult>(CancellationTokenSource source)
-            where TCommand : ICommandAsyncCancellable<TResult>, new()
+        async Task<TResult> IArchitecture.SendCommandAsync<TCommand, TResult>(CancellationTokenSource source)
         {
             var command = new TCommand();
             command.SetArchitecture(this);
@@ -120,7 +115,7 @@ namespace Framework.GameMode
             return task.Result;
         }
 
-        public TResult SendQuery<TResult>(IQuery<TResult> query)
+        TResult IArchitecture.SendQuery<TResult>(IQuery<TResult> query)
         {
             query.SetArchitecture(this);
             var result = query.Execute();
@@ -128,7 +123,7 @@ namespace Framework.GameMode
             return result;
         }
 
-        public TResult SendQuery<TQuery, TResult>() where TQuery : IQuery<TResult>, new()
+        TResult IArchitecture.SendQuery<TQuery, TResult>()
         {
             var query = new TQuery();
             query.SetArchitecture(this);
@@ -137,54 +132,74 @@ namespace Framework.GameMode
             return result;
         }
 
-        public IUnregisterHandler RegisterEvent<TEvent>(Action<TEvent> action)
+        IUnregisterHandler IArchitecture.RegisterEvent<TEvent>(Action<TEvent> action)
         {
             return eventSystem.Register(action);
         }
 
-        public IUnregisterHandler RegisterEvent<TEvent, TResult>(Func<TEvent, TResult> func)
+        IUnregisterHandler IArchitecture.RegisterEvent<TEvent, TResult>(Func<TEvent, TResult> func)
         {
             return eventSystem.Register(func);
         }
 
-        public void UnregisterEvent<TEvent>(Action<TEvent> action)
+        void IArchitecture.UnregisterEvent<TEvent>(Action<TEvent> action)
         {
             eventSystem.Unregister(action);
         }
 
-        public void UnregisterEvent<TEvent, TResult>(Func<TEvent, TResult> func)
+        void IArchitecture.UnregisterEvent<TEvent, TResult>(Func<TEvent, TResult> func)
         {
             eventSystem.Unregister(func);
         }
 
-        public void InvokeEvent<TEvent>(TEvent t)
+        void IArchitecture.InvokeEvent<TEvent>(TEvent t)
         {
             eventSystem.Invoke(t);
         }
 
-        public void InvokeEvent<TEvent>() where TEvent : new()
+        void IArchitecture.InvokeEvent<TEvent>()
         {
             eventSystem.Invoke<TEvent>();
         }
 
-        public TResult InvokeEvent<TEvent, TResult>(TEvent t)
+        TResult IArchitecture.InvokeEvent<TEvent, TResult>(TEvent t)
         {
             return eventSystem.Invoke<TEvent, TResult>(t);
         }
 
-        public TResult InvokeEvent<TEvent, TResult>() where TEvent : new()
+        TResult IArchitecture.InvokeEvent<TEvent, TResult>()
         {
             return eventSystem.Invoke<TEvent, TResult>();
         }
 
-        public void RegisterDependency<TDependency>(object dependency)
+        void IArchitecture.RegisterDependency<TDependency>(object dependency)
         {
             iocContainer.Register<TDependency>(dependency);
         }
 
-        public void InjectDependency<TDependency>(object instance)
+        TDependency IArchitecture.ResolveDependency<TDependency>()
         {
-            iocContainer.Inject<TDependency>(instance);
+            return iocContainer.Resolve<TDependency>();
+        }
+
+        void IArchitecture.InjectDependency<TDependency>(object obj)
+        {
+            iocContainer.Inject<TDependency>(obj);
+        }
+
+        void IArchitecture.SendCommandObject<TEventObject>(TEventObject eventObject)
+        {
+            eventObject.SetArchitecture(this);
+            eventObject.Execute();
+            eventObject.SetArchitecture(null);
+        }
+
+        bool IArchitecture.CheckCondition<TCondition>(TCondition condition)
+        {
+            condition.SetArchitecture(this);
+            var isValid = condition.IsValid;
+            condition.SetArchitecture(null);
+            return isValid;
         }
 
         public static T Load()
@@ -196,7 +211,7 @@ namespace Framework.GameMode
         public static void Unload()
         {
             if (!Initialized) return;
-            if (!Instances.Remove(typeof(T))) throw new KeyNotFoundException();
+            _ = Instances.Remove(typeof(T));
         }
 
         protected void RegisterSystem<TSystem>(TSystem system) where TSystem : class, ISystem
