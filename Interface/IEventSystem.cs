@@ -19,5 +19,7 @@ namespace Framework.Interface
         TResult Invoke<T, TResult>(T t);
 
         TResult Invoke<T, TResult>() where T : new();
+
+        void Clear();
     }
 }

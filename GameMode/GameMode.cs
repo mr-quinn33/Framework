@@ -211,7 +211,12 @@ namespace Framework.GameMode
         public static void Unload()
         {
             if (!Initialized) return;
-            _ = Instances.Remove(typeof(T));
+            if (!Instances.Remove(typeof(T), out var value)) return;
+            if (value is not GameMode<T> gameMode) return;
+            gameMode.models.Clear();
+            gameMode.systems.Clear();
+            gameMode.eventSystem.Clear();
+            gameMode.iocContainer.Clear();
         }
 
         protected void RegisterSystem<TSystem>(TSystem system) where TSystem : class, ISystem

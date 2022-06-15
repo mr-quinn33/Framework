@@ -64,5 +64,10 @@ namespace Framework.EventSystem
         {
             return (this as IEventSystem).Invoke<T, TResult>(new T());
         }
+
+        void IEventSystem.Clear()
+        {
+            registrations.Clear();
+        }
     }
 }
