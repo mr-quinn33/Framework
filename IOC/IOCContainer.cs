@@ -1,16 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Framework.IOC.Attribute;
-using Framework.IOC.Interface;
+using Framework.IOC.Attributes;
+using Framework.IOC.Interfaces;
 
 namespace Framework.IOC
 {
     public class IOCContainer : IIOCContainer
     {
-        private readonly ICollection<Type> registeredTypes = new HashSet<Type>();
         private readonly IDictionary<Type, Type> registeredDependencies = new Dictionary<Type, Type>();
         private readonly IDictionary<Type, object> registeredInstances = new Dictionary<Type, object>();
+        private readonly ICollection<Type> registeredTypes = new HashSet<Type>();
 
         void IIOCContainer.Register<T>()
         {

@@ -1,5 +1,5 @@
 ﻿using Framework.IOC.Editor.Tests.Examples;
-using Framework.IOC.Interface;
+using Framework.IOC.Interfaces;
 using NUnit.Framework;
 
 namespace Framework.IOC.Editor.Tests

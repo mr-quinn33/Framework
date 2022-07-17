@@ -1,4 +1,4 @@
-﻿using Framework.IOC.Attribute;
+﻿using Framework.IOC.Attributes;
 
 namespace Framework.IOC.Editor.Tests.Examples
 {
