@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Framework.Collections.Interfaces;
 using Framework.Interfaces;
 using UnityEngine;
 
@@ -17,6 +18,14 @@ namespace Framework.Scripts
         public void Add(IUnregisterHandler unregisterHandler)
         {
             unregisterHandlers.Add(unregisterHandler);
+        }
+
+        public void Add(IUnregisterHandlerCollection unregisterHandlerCollection)
+        {
+            foreach (var unregisterHandler in unregisterHandlerCollection.UnregisterHandlers)
+            {
+                Add(unregisterHandler);
+            }
         }
     }
 }
