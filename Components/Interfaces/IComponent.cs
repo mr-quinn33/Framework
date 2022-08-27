@@ -2,7 +2,7 @@ using Framework.Rules.Interfaces;
 
 namespace Framework.Components.Interfaces
 {
-    public interface IComponent : ISendCommand, ISendCommandAsync, ISendQuery, IRegisterEvent, IUnregisterEvent, IRegisterDependency, IResolveDependency, IInjectDependency
+    public interface IComponent : IRegisterDependency, IResolveDependency, IInjectDependency
     {
     }
 }

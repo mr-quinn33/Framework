@@ -1,9 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Framework.CommandObjects.Interfaces;
 using Framework.Commands.Interfaces;
-using Framework.Conditions.Interfaces;
 using Framework.Interfaces;
 using Framework.Models.Interfaces;
 using Framework.Queries.Interfaces;
@@ -32,13 +30,13 @@ namespace Framework.GameModes.Interfaces
 
         Task<TResult> SendCommandAsync<T, TResult>() where T : ICommandAsync<TResult>, new();
 
-        Task SendCommandAsync<T>(T command, CancellationTokenSource source) where T : ICommandAsyncCancellable;
+        Task SendCommandAsync<T>(T command, CancellationTokenSource source) where T : ICommandCancellableAsync;
 
-        Task SendCommandAsync<T>(CancellationTokenSource source) where T : ICommandAsyncCancellable, new();
+        Task SendCommandAsync<T>(CancellationTokenSource source) where T : ICommandCancellableAsync, new();
 
-        Task<TResult> SendCommandAsync<T, TResult>(T command, CancellationTokenSource source) where T : ICommandAsyncCancellable<TResult>;
+        Task<TResult> SendCommandAsync<T, TResult>(T command, CancellationTokenSource source) where T : ICommandCancellableAsync<TResult>;
 
-        Task<TResult> SendCommandAsync<T, TResult>(CancellationTokenSource source) where T : ICommandAsyncCancellable<TResult>, new();
+        Task<TResult> SendCommandAsync<T, TResult>(CancellationTokenSource source) where T : ICommandCancellableAsync<TResult>, new();
 
         TResult SendQuery<TResult>(IQuery<TResult> query);
 
@@ -65,9 +63,5 @@ namespace Framework.GameModes.Interfaces
         TDependency ResolveDependency<TDependency>();
 
         void InjectDependency<TDependency>(object obj);
-
-        void SendCommandObject<T>(T eventObject) where T : ICommandObject;
-
-        bool CheckCondition<T>(T condition) where T : ICondition;
     }
 }

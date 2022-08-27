@@ -31,24 +31,24 @@ namespace Framework.Extensions
             return task.Result;
         }
 
-        public static async Task SendCommandAsync<T>(this ISendCommandAsync self, T command, CancellationTokenSource source) where T : ICommandAsyncCancellable
+        public static async Task SendCommandAsync<T>(this ISendCommandAsync self, T command, CancellationTokenSource source) where T : ICommandCancellableAsync
         {
             await self.GetGameMode().SendCommandAsync(command, source);
         }
 
-        public static async Task SendCommandAsync<T>(this ISendCommandAsync self, CancellationTokenSource source) where T : ICommandAsyncCancellable, new()
+        public static async Task SendCommandAsync<T>(this ISendCommandAsync self, CancellationTokenSource source) where T : ICommandCancellableAsync, new()
         {
             await self.GetGameMode().SendCommandAsync<T>(source);
         }
 
-        public static async Task<TResult> SendCommandAsync<T, TResult>(this ISendCommandAsync self, T command, CancellationTokenSource source) where T : ICommandAsyncCancellable<TResult>
+        public static async Task<TResult> SendCommandAsync<T, TResult>(this ISendCommandAsync self, T command, CancellationTokenSource source) where T : ICommandCancellableAsync<TResult>
         {
             var task = self.GetGameMode().SendCommandAsync<T, TResult>(command, source);
             await task;
             return task.Result;
         }
 
-        public static async Task<TResult> SendCommandAsync<T, TResult>(this ISendCommandAsync self, CancellationTokenSource source) where T : ICommandAsyncCancellable<TResult>, new()
+        public static async Task<TResult> SendCommandAsync<T, TResult>(this ISendCommandAsync self, CancellationTokenSource source) where T : ICommandCancellableAsync<TResult>, new()
         {
             var task = self.GetGameMode().SendCommandAsync<T, TResult>(source);
             await task;

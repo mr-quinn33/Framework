@@ -194,21 +194,6 @@ namespace Framework.GameModes
             iocContainer.Inject<TDependency>(obj);
         }
 
-        void IGameMode.SendCommandObject<TEventObject>(TEventObject eventObject)
-        {
-            eventObject.SetGameMode(this);
-            eventObject.Execute();
-            eventObject.SetGameMode(null);
-        }
-
-        bool IGameMode.CheckCondition<TCondition>(TCondition condition)
-        {
-            condition.SetGameMode(this);
-            var isValid = condition.IsValid;
-            condition.SetGameMode(null);
-            return isValid;
-        }
-
         public static T Load()
         {
             if (!Initialized) InitializeGameMode();

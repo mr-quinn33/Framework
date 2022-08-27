@@ -22,10 +22,7 @@ namespace Framework.Scripts
 
         public void Add(IUnregisterHandlerCollection unregisterHandlerCollection)
         {
-            foreach (var unregisterHandler in unregisterHandlerCollection.UnregisterHandlers)
-            {
-                Add(unregisterHandler);
-            }
+            foreach (var unregisterHandler in unregisterHandlerCollection.UnregisterHandlers) Add(unregisterHandler);
         }
     }
 }

@@ -7,7 +7,7 @@ using Framework.Rules.Interfaces;
 
 namespace Framework.Commands
 {
-    public abstract class CommandAsyncCancellable : ICommandAsyncCancellable
+    public abstract class CommandCancellableAsync : ICommandCancellableAsync
     {
         private IGameMode gameMode;
 
@@ -21,7 +21,7 @@ namespace Framework.Commands
             this.gameMode = gameMode;
         }
 
-        async Task ICommandAsyncCancellable.ExecuteAsync(CancellationTokenSource source)
+        async Task ICommandCancellableAsync.ExecuteAsync(CancellationTokenSource source)
         {
             try
             {
@@ -40,7 +40,7 @@ namespace Framework.Commands
         protected abstract Task ExecuteAsync(CancellationToken token);
     }
 
-    public abstract class CommandAsyncCancellable<T> : ICommandAsyncCancellable<T>
+    public abstract class CommandCancellableAsync<T> : ICommandCancellableAsync<T>
     {
         private IGameMode gameMode;
 
@@ -54,7 +54,7 @@ namespace Framework.Commands
             this.gameMode = gameMode;
         }
 
-        async Task<T> ICommandAsyncCancellable<T>.ExecuteAsync(CancellationTokenSource source)
+        async Task<T> ICommandCancellableAsync<T>.ExecuteAsync(CancellationTokenSource source)
         {
             var task = ExecuteAsync(source.Token);
 
