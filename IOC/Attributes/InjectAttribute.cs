@@ -1,6 +1,8 @@
-﻿namespace Framework.IOC.Attributes
+﻿using System;
+
+namespace Framework.IOC.Attributes
 {
-    public class InjectAttribute : System.Attribute
+    public class InjectAttribute : Attribute
     {
     }
 }
