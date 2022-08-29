@@ -20,7 +20,8 @@ namespace Framework.ReactiveProperties
             {
                 if (value == null && this.value == null) return;
                 if (value != null && value.Equals(this.value)) return;
-                OnValueChanged?.Invoke(this.value = value);
+                this.value = value;
+                OnValueChanged?.Invoke(this.value);
             }
         }
 
