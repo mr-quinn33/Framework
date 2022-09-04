@@ -1,6 +1,6 @@
-﻿using Framework.Rules.Interfaces;
+﻿using Framework.Rules;
 
-namespace Framework.Components.Interfaces
+namespace Framework.Components
 {
     public interface IController : IComponent, ISendCommand, ISendCommandAsync
     {

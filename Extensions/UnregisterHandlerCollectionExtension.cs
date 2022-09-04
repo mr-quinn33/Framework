@@ -1,4 +1,4 @@
-﻿using Framework.Collections.Interfaces;
+﻿using Framework.Collections;
 using Framework.Scripts;
 using UnityEngine;
 
@@ -8,7 +8,7 @@ namespace Framework.Extensions
     {
         public static void UnregisterOnGameObjectDestroyed(this IUnregisterHandlerCollection self, GameObject gameObject)
         {
-            if (!gameObject.TryGetComponent(out UnregisterOnDestroy unregisterOnDestroy)) unregisterOnDestroy = gameObject.AddComponent<UnregisterOnDestroy>();
+            if (!gameObject.TryGetComponent(out IUnregisterOnDestroy unregisterOnDestroy)) unregisterOnDestroy = gameObject.AddComponent<UnregisterOnDestroy>();
             unregisterOnDestroy.Add(self);
         }
 

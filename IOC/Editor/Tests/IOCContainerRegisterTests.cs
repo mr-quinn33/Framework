@@ -1,5 +1,4 @@
-﻿using Framework.IOC.Interfaces;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace Framework.IOC.Editor.Tests
 {

@@ -1,10 +1,19 @@
 using System.Threading.Tasks;
-using Framework.Commands.Interfaces;
-using Framework.GameModes.Interfaces;
-using Framework.Rules.Interfaces;
+using Framework.GameModes;
+using Framework.Rules;
 
 namespace Framework.Commands
 {
+    public interface ICommandAsync : ISetGameMode, IGetSystem, IGetModel, IGetUtility, ISendCommand, ISendCommandAsync, ISendQuery, ISendEvent
+    {
+        Task ExecuteAsync();
+    }
+
+    public interface ICommandAsync<T> : ISetGameMode, IGetSystem, IGetModel, IGetUtility, ISendCommand, ISendCommandAsync, ISendQuery, ISendEvent
+    {
+        Task<T> ExecuteAsync();
+    }
+
     public abstract class CommandAsync : ICommandAsync
     {
         private IGameMode gameMode;

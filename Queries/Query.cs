@@ -1,9 +1,13 @@
-using Framework.GameModes.Interfaces;
-using Framework.Queries.Interfaces;
-using Framework.Rules.Interfaces;
+using Framework.GameModes;
+using Framework.Rules;
 
 namespace Framework.Queries
 {
+    public interface IQuery<out TResult> : ISetGameMode, IGetSystem, IGetModel, ISendQuery
+    {
+        TResult Execute();
+    }
+
     public abstract class Query<T> : IQuery<T>
     {
         private IGameMode gameMode;

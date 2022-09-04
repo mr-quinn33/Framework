@@ -1,5 +1,5 @@
-using Framework.Queries.Interfaces;
-using Framework.Rules.Interfaces;
+using Framework.Queries;
+using Framework.Rules;
 
 namespace Framework.Extensions
 {

@@ -1,4 +1,4 @@
-namespace Framework.Utilities.Interfaces
+namespace Framework.Utilities
 {
     public interface IUtility
     {

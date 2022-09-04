@@ -1,6 +1,6 @@
-using Framework.GameModes.Interfaces;
+using Framework.GameModes;
 
-namespace Framework.Rules.Interfaces
+namespace Framework.Rules
 {
     public interface ISetGameMode
     {

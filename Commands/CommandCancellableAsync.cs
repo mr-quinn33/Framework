@@ -1,12 +1,21 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Framework.Commands.Interfaces;
-using Framework.GameModes.Interfaces;
-using Framework.Rules.Interfaces;
+using Framework.GameModes;
+using Framework.Rules;
 
 namespace Framework.Commands
 {
+    public interface ICommandCancellableAsync : ISetGameMode, IGetSystem, IGetModel, IGetUtility, ISendCommand, ISendCommandAsync, ISendQuery, ISendEvent
+    {
+        Task ExecuteAsync(CancellationTokenSource source);
+    }
+
+    public interface ICommandCancellableAsync<T> : ISetGameMode, IGetSystem, IGetModel, IGetUtility, ISendCommand, ISendCommandAsync, ISendQuery, ISendEvent
+    {
+        Task<T> ExecuteAsync(CancellationTokenSource source);
+    }
+
     public abstract class CommandCancellableAsync : ICommandCancellableAsync
     {
         private IGameMode gameMode;

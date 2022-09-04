@@ -1,9 +1,13 @@
-using Framework.GameModes.Interfaces;
-using Framework.Models.Interfaces;
-using Framework.Rules.Interfaces;
+using Framework.GameModes;
+using Framework.Rules;
 
 namespace Framework.Models
 {
+    public interface IModel : ISetGameMode, IGetUtility, ISendEvent
+    {
+        void Initialize();
+    }
+
     public abstract class Model : IModel
     {
         private IGameMode gameMode;

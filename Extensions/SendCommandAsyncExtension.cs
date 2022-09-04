@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Framework.Commands.Interfaces;
-using Framework.Rules.Interfaces;
+using Framework.Commands;
+using Framework.Rules;
 
 namespace Framework.Extensions
 {

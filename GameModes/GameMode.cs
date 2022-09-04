@@ -2,23 +2,77 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Framework.Commands;
 using Framework.EventSystems;
-using Framework.EventSystems.Interfaces;
-using Framework.GameModes.Interfaces;
 using Framework.Interfaces;
 using Framework.IOC;
-using Framework.IOC.Interfaces;
-using Framework.Models.Interfaces;
-using Framework.Queries.Interfaces;
-using Framework.Systems.Interfaces;
-using Framework.Utilities.Interfaces;
+using Framework.Models;
+using Framework.Queries;
+using Framework.Systems;
+using Framework.Utilities;
 
 namespace Framework.GameModes
 {
+    public interface IGameMode
+    {
+        T GetSystem<T>() where T : class, ISystem;
+
+        T GetModel<T>() where T : class, IModel;
+
+        T GetUtility<T>() where T : class, IUtility;
+
+        void SendCommand<T>(T command) where T : ICommand;
+
+        void SendCommand<T>() where T : ICommand, new();
+
+        Task SendCommandAsync<T>(T command) where T : ICommandAsync;
+
+        Task SendCommandAsync<T>() where T : ICommandAsync, new();
+
+        Task<TResult> SendCommandAsync<T, TResult>(T command) where T : ICommandAsync<TResult>;
+
+        Task<TResult> SendCommandAsync<T, TResult>() where T : ICommandAsync<TResult>, new();
+
+        Task SendCommandAsync<T>(T command, CancellationTokenSource source) where T : ICommandCancellableAsync;
+
+        Task SendCommandAsync<T>(CancellationTokenSource source) where T : ICommandCancellableAsync, new();
+
+        Task<TResult> SendCommandAsync<T, TResult>(T command, CancellationTokenSource source) where T : ICommandCancellableAsync<TResult>;
+
+        Task<TResult> SendCommandAsync<T, TResult>(CancellationTokenSource source) where T : ICommandCancellableAsync<TResult>, new();
+
+        TResult SendQuery<TResult>(IQuery<TResult> query);
+
+        TResult SendQuery<T, TResult>() where T : IQuery<TResult>, new();
+
+        IUnregisterHandler RegisterEvent<T>(Action<T> action);
+
+        IUnregisterHandler RegisterEvent<T, TResult>(Func<T, TResult> func);
+
+        void UnregisterEvent<T>(Action<T> action);
+
+        void UnregisterEvent<T, TResult>(Func<T, TResult> func);
+
+        void SendEvent<T>(T t);
+
+        void SendEvent<T>() where T : new();
+
+        TResult SendEvent<T, TResult>(T t);
+
+        TResult SendEvent<T, TResult>() where T : new();
+
+        void RegisterDependency<TDependency>(object dependency);
+
+        TDependency ResolveDependency<TDependency>();
+
+        void InjectDependency<TDependency>(object obj);
+    }
+
     public abstract class GameMode<T> : GameModeBase, IGameMode where T : GameMode<T>, new()
     {
+        private readonly IIOCContainer coreContainer = new IOCContainer();
+        private readonly IIOCContainer dependencyContainer = new IOCContainer();
         private readonly IEventSystem eventSystem = new EventSystem();
-        private readonly IIOCContainer iocContainer = new IOCContainer();
         private readonly ICollection<IModel> models = new List<IModel>();
         private readonly ICollection<ISystem> systems = new List<ISystem>();
 
@@ -26,17 +80,17 @@ namespace Framework.GameModes
 
         TSystem IGameMode.GetSystem<TSystem>() where TSystem : class
         {
-            return iocContainer.Resolve<TSystem>();
+            return coreContainer.Resolve<TSystem>();
         }
 
         TModel IGameMode.GetModel<TModel>() where TModel : class
         {
-            return iocContainer.Resolve<TModel>();
+            return coreContainer.Resolve<TModel>();
         }
 
         TUtility IGameMode.GetUtility<TUtility>() where TUtility : class
         {
-            return iocContainer.Resolve<TUtility>();
+            return coreContainer.Resolve<TUtility>();
         }
 
         void IGameMode.SendCommand<TCommand>(TCommand command)
@@ -159,45 +213,45 @@ namespace Framework.GameModes
             eventSystem.Unregister(func);
         }
 
-        void IGameMode.InvokeEvent<TEvent>(TEvent t)
+        void IGameMode.SendEvent<TEvent>(TEvent t)
         {
             eventSystem.Invoke(t);
         }
 
-        void IGameMode.InvokeEvent<TEvent>()
+        void IGameMode.SendEvent<TEvent>()
         {
             eventSystem.Invoke<TEvent>();
         }
 
-        TResult IGameMode.InvokeEvent<TEvent, TResult>(TEvent t)
+        TResult IGameMode.SendEvent<TEvent, TResult>(TEvent t)
         {
             return eventSystem.Invoke<TEvent, TResult>(t);
         }
 
-        TResult IGameMode.InvokeEvent<TEvent, TResult>()
+        TResult IGameMode.SendEvent<TEvent, TResult>()
         {
             return eventSystem.Invoke<TEvent, TResult>();
         }
 
         void IGameMode.RegisterDependency<TDependency>(object dependency)
         {
-            iocContainer.Register<TDependency>(dependency);
+            dependencyContainer.Register<TDependency>(dependency);
         }
 
         TDependency IGameMode.ResolveDependency<TDependency>()
         {
-            return iocContainer.Resolve<TDependency>();
+            return dependencyContainer.Resolve<TDependency>();
         }
 
         void IGameMode.InjectDependency<TDependency>(object obj)
         {
-            iocContainer.Inject<TDependency>(obj);
+            dependencyContainer.Inject<TDependency>(obj);
         }
 
         public static T Load()
         {
-            if (!Initialized) InitializeGameMode();
-            return Instances[typeof(T)] as T;
+            if (!Initialized) Constructor();
+            return (T) Instances[typeof(T)];
         }
 
         public static void Unload()
@@ -205,16 +259,15 @@ namespace Framework.GameModes
             if (!Initialized) return;
             if (!Instances.Remove(typeof(T), out var value)) return;
             if (value is not GameMode<T> gameMode) return;
-            gameMode.models.Clear();
-            gameMode.systems.Clear();
             gameMode.eventSystem.Clear();
-            gameMode.iocContainer.Clear();
+            gameMode.coreContainer.Clear();
+            gameMode.dependencyContainer.Clear();
         }
 
         protected void RegisterSystem<TSystem>(TSystem system) where TSystem : class, ISystem
         {
             system.SetGameMode(this);
-            iocContainer.Register<TSystem>(system);
+            coreContainer.Register<TSystem>(system);
             if (Initialized) system.Initialize();
             else systems.Add(system);
         }
@@ -222,17 +275,17 @@ namespace Framework.GameModes
         protected void RegisterModel<TModel>(TModel model) where TModel : class, IModel
         {
             model.SetGameMode(this);
-            iocContainer.Register<TModel>(model);
+            coreContainer.Register<TModel>(model);
             if (Initialized) model.Initialize();
             else models.Add(model);
         }
 
         protected void RegisterUtility<TUtility>(TUtility utility) where TUtility : class, IUtility
         {
-            iocContainer.Register<TUtility>(utility);
+            coreContainer.Register<TUtility>(utility);
         }
 
-        private static void InitializeGameMode()
+        private static void Constructor()
         {
             if (Initialized) return;
             var instance = new T();

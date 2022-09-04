@@ -1,4 +1,4 @@
-namespace Framework.EventSystems.Interfaces
+namespace Framework.EventSystems
 {
     public interface IRegistration
     {

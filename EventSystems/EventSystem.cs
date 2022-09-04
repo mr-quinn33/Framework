@@ -1,10 +1,30 @@
 using System;
 using System.Collections.Generic;
-using Framework.EventSystems.Interfaces;
 using Framework.Interfaces;
 
 namespace Framework.EventSystems
 {
+    public interface IEventSystem
+    {
+        IUnregisterHandler Register<T>(Action<T> action);
+
+        IUnregisterHandler Register<T, TResult>(Func<T, TResult> func);
+
+        void Unregister<T>(Action<T> action);
+
+        void Unregister<T, TResult>(Func<T, TResult> func);
+
+        void Invoke<T>(T t);
+
+        void Invoke<T>() where T : new();
+
+        TResult Invoke<T, TResult>(T t);
+
+        TResult Invoke<T, TResult>() where T : new();
+
+        void Clear();
+    }
+
     public class EventSystem : IEventSystem
     {
         private readonly IDictionary<Type, IRegistration> registrations = new Dictionary<Type, IRegistration>();
@@ -52,7 +72,7 @@ namespace Framework.EventSystems
 
         void IEventSystem.Invoke<T>()
         {
-            (this as IEventSystem).Invoke(new T());
+            ((IEventSystem) this).Invoke(new T());
         }
 
         TResult IEventSystem.Invoke<T, TResult>(T t)
@@ -63,12 +83,50 @@ namespace Framework.EventSystems
 
         TResult IEventSystem.Invoke<T, TResult>()
         {
-            return (this as IEventSystem).Invoke<T, TResult>(new T());
+            return ((IEventSystem) this).Invoke<T, TResult>(new T());
         }
 
         void IEventSystem.Clear()
         {
             registrations.Clear();
+        }
+
+        private class ActionUnregisterHandler<T> : IUnregisterHandler
+        {
+            private Action<T> action;
+            private IEventSystem eventSystem;
+
+            public ActionUnregisterHandler(IEventSystem eventSystem, Action<T> action)
+            {
+                this.eventSystem = eventSystem;
+                this.action = action;
+            }
+
+            void IUnregisterHandler.Unregister()
+            {
+                eventSystem.Unregister(action);
+                eventSystem = null;
+                action = null;
+            }
+        }
+
+        private class FuncUnregisterHandler<T, TResult> : IUnregisterHandler
+        {
+            private IEventSystem eventSystem;
+            private Func<T, TResult> func;
+
+            public FuncUnregisterHandler(IEventSystem eventSystem, Func<T, TResult> func)
+            {
+                this.eventSystem = eventSystem;
+                this.func = func;
+            }
+
+            void IUnregisterHandler.Unregister()
+            {
+                eventSystem.Unregister(func);
+                eventSystem = null;
+                func = null;
+            }
         }
     }
 }

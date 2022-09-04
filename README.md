@@ -1,2 +1,2 @@
 # Framework
-A Unity game framework based on QFramework
+A simple Unity game framework based on [QFramework](https://github.com/liangxiegame/QFramework)

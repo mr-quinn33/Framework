@@ -1,6 +1,6 @@
 using System;
 using Framework.Interfaces;
-using Framework.Rules.Interfaces;
+using Framework.Rules;
 
 namespace Framework.Extensions
 {

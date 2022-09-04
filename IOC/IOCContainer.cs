@@ -2,10 +2,33 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Framework.IOC.Attributes;
-using Framework.IOC.Interfaces;
 
 namespace Framework.IOC
 {
+    public interface IIOCContainer
+    {
+        /// <summary>
+        ///     Register a new instance
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        void Register<T>();
+
+        /// <summary>
+        ///     Register an instance
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <typeparam name="T"></typeparam>
+        void Register<T>(object instance);
+
+        void Register<TParent, TChild>() where TChild : TParent;
+
+        T Resolve<T>();
+
+        void Inject<T>(object obj);
+
+        void Clear();
+    }
+
     public class IOCContainer : IIOCContainer
     {
         private readonly IDictionary<Type, Type> registeredDependencies = new Dictionary<Type, Type>();

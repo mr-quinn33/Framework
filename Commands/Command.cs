@@ -1,9 +1,13 @@
-using Framework.Commands.Interfaces;
-using Framework.GameModes.Interfaces;
-using Framework.Rules.Interfaces;
+using Framework.GameModes;
+using Framework.Rules;
 
 namespace Framework.Commands
 {
+    public interface ICommand : ISetGameMode, IGetSystem, IGetModel, IGetUtility, ISendCommand, ISendCommandAsync, ISendQuery, ISendEvent
+    {
+        void Execute();
+    }
+
     public abstract class Command : ICommand
     {
         private IGameMode gameMode;

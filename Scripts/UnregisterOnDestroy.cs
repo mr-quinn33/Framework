@@ -1,11 +1,18 @@
 using System.Collections.Generic;
-using Framework.Collections.Interfaces;
+using Framework.Collections;
 using Framework.Interfaces;
 using UnityEngine;
 
 namespace Framework.Scripts
 {
-    public class UnregisterOnDestroy : MonoBehaviour
+    public interface IUnregisterOnDestroy
+    {
+        void Add(IUnregisterHandler unregisterHandler);
+
+        void Add(IUnregisterHandlerCollection unregisterHandlerCollection);
+    }
+
+    public class UnregisterOnDestroy : MonoBehaviour, IUnregisterOnDestroy
     {
         private readonly ICollection<IUnregisterHandler> unregisterHandlers = new HashSet<IUnregisterHandler>();
 

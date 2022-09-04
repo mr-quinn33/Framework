@@ -1,4 +1,4 @@
-namespace Framework.Rules.Interfaces
+namespace Framework.Rules
 {
     public interface IGetSystem : IGetGameMode
     {
