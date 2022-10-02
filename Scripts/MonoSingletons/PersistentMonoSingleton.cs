@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Framework.Scripts.Singletons
+namespace Framework.Scripts.MonoSingletons
 {
     public abstract class PersistentMonoSingleton<T> : MonoBehaviour where T : PersistentMonoSingleton<T>
     {

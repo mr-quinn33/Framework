@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Framework.Scripts.Singletons
+namespace Framework.Scripts.MonoSingletons
 {
     public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T>
     {

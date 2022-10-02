@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Framework.Tools.Extensions
 {
-    public static class FindInChildrenExtension
+    public static class TransformExtension
     {
         public static Transform FindInChildren(this Transform root, string name)
         {

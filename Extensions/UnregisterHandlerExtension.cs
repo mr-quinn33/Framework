@@ -7,10 +7,10 @@ namespace Framework.Extensions
 {
     public static class UnregisterHandlerExtension
     {
-        public static void UnregisterOnGameObjectDestroyed(this IUnregisterHandler unregisterHandler, GameObject gameObject)
+        public static void UnregisterOnGameObjectDestroyed(this IUnregisterHandler self, GameObject gameObject)
         {
             if (!gameObject.TryGetComponent(out IUnregisterOnDestroy unregisterOnDestroy)) unregisterOnDestroy = gameObject.AddComponent<UnregisterOnDestroy>();
-            unregisterOnDestroy.Add(unregisterHandler);
+            unregisterOnDestroy.Add(self);
         }
 
         public static void AddToUnregisterHandlerCollection(this IUnregisterHandler self, IUnregisterHandlerCollection collection)

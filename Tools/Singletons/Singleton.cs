@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Framework.Scripts.Singletons
+namespace Framework.Tools.Singletons
 {
     public abstract class Singleton<T> : IDisposable where T : Singleton<T>, new()
     {

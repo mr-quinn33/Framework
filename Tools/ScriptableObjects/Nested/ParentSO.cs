@@ -57,15 +57,15 @@ namespace Framework.Tools.ScriptableObjects.Nested
         {
             var assetAddress = AssetDatabase.GetAssetPath(this);
             var child = CreateInstance<TChild>();
-            child.name = typeof(TChild).Name;
+            var childName = typeof(TChild).Name;
+            var childAssetAddress = assetAddress + $"[{childName}]";
+            child.name = childName;
             child.Initialize(this, assetAddress);
+            childAssetAddressList.Add(childAssetAddress);
             Children.Add(child);
 
             AssetDatabase.AddObjectToAsset(child, this);
             AssetDatabase.SaveAssets();
-
-            var childAssetAddress = assetAddress + $"[{child.name}]";
-            childAssetAddressList.Add(childAssetAddress);
 
             EditorUtility.SetDirty(child);
             EditorUtility.SetDirty(this);
@@ -77,19 +77,12 @@ namespace Framework.Tools.ScriptableObjects.Nested
             for (var i = Children.Count - 1; i >= 0; i--)
             {
                 var child = Children[i];
-                var childAssetAddress = assetAddress + $"[{child.name}]";
+                var childAssetAddress = assetAddress + $"[{child.GetType().Name}]";
                 if (child is TChild && Remove(child, childAssetAddress)) Undo.DestroyObjectImmediate(child);
             }
 
             AssetDatabase.SaveAssets();
         }
-
-#if UNITY_EDITOR
-        private void OnValidate()
-        {
-            MaskSureChildren();
-        }
-#endif
 
 #if DEBUG && ODIN_INSPECTOR
         [OnInspectorInit]

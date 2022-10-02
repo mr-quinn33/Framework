@@ -59,14 +59,31 @@ namespace Framework.Tools.ScriptableObjects.Nested
 
         protected IEnumerable<ChildSO> GetChildren()
         {
-            return ParentSO == null ? Enumerable.Empty<ChildSO>() : ParentSO.Children;
+            return ParentSO.Children;
         }
+
+#if UNITY_EDITOR
+        protected TParent GetParentEditor<TParent>() where TParent : class, IParentSO<ChildSO>
+        {
+            return parentSO as TParent;
+        }
+
+        protected TChild GetChildEditor<TChild>() where TChild : ChildSO
+        {
+            return parentSO?.GetChild<TChild>();
+        }
+
+        protected IEnumerable<ChildSO> GetChildrenEditor()
+        {
+            return parentSO == null ? Enumerable.Empty<ChildSO>() : parentSO.Children;
+        }
+#endif
 
 #if UNITY_EDITOR
         [ContextMenu(nameof(Destroy))]
         private void Destroy()
         {
-            var assetAddress = parentAssetAddress + $"[{name}]";
+            var assetAddress = parentAssetAddress + $"[{GetType().Name}]";
             if (ParentSO.Remove(this, assetAddress))
             {
                 Undo.DestroyObjectImmediate(this);
