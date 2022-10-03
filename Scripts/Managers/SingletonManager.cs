@@ -4,151 +4,191 @@ using UnityEngine;
 
 namespace Framework.Scripts.Managers
 {
-    public abstract class SingletonManager<T> : MonoBehaviour
+    public abstract class SingletonManager<T1> : MonoBehaviour
     {
+        protected T1 t1;
+
         protected virtual void Awake()
         {
-            Initialize(typeof(T));
+            if (Initialize(typeof(T1), out var instance)) t1 = (T1) instance;
         }
 
-        protected void Initialize(Type type)
+        protected bool Initialize(Type type, out object instance)
         {
-            if (type.GetProperty("Instance", BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Static | BindingFlags.GetProperty)?.GetValue(null) is Component component) component.transform.SetParent(transform);
+            var propertyInfo = type.GetProperty("Instance", BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Static | BindingFlags.GetProperty);
+            if (propertyInfo != null)
+            {
+                instance = propertyInfo.GetValue(null);
+                return true;
+            }
+
+            instance = null;
+            return false;
         }
     }
 
     public abstract class SingletonManager<T1, T2> : SingletonManager<T1>
     {
+        protected T2 t2;
+
         protected override void Awake()
         {
             base.Awake();
-            Initialize(typeof(T2));
+            if (Initialize(typeof(T2), out var instance)) t2 = (T2) instance;
         }
     }
 
     public abstract class SingletonManager<T1, T2, T3> : SingletonManager<T1, T2>
     {
+        protected T3 t3;
+
         protected override void Awake()
         {
             base.Awake();
-            Initialize(typeof(T3));
+            if (Initialize(typeof(T3), out var instance)) t3 = (T3) instance;
         }
     }
 
     public abstract class SingletonManager<T1, T2, T3, T4> : SingletonManager<T1, T2, T3>
     {
+        protected T4 t4;
+
         protected override void Awake()
         {
             base.Awake();
-            Initialize(typeof(T4));
+            if (Initialize(typeof(T4), out var instance)) t4 = (T4) instance;
         }
     }
 
     public abstract class SingletonManager<T1, T2, T3, T4, T5> : SingletonManager<T1, T2, T3, T4>
     {
+        protected T5 t5;
+
         protected override void Awake()
         {
             base.Awake();
-            Initialize(typeof(T5));
+            if (Initialize(typeof(T5), out var instance)) t5 = (T5) instance;
         }
     }
 
     public abstract class SingletonManager<T1, T2, T3, T4, T5, T6> : SingletonManager<T1, T2, T3, T4, T5>
     {
+        protected T6 t6;
+
         protected override void Awake()
         {
             base.Awake();
-            Initialize(typeof(T6));
+            if (Initialize(typeof(T6), out var instance)) t6 = (T6) instance;
         }
     }
 
     public abstract class SingletonManager<T1, T2, T3, T4, T5, T6, T7> : SingletonManager<T1, T2, T3, T4, T5, T6>
     {
+        protected T7 t7;
+
         protected override void Awake()
         {
             base.Awake();
-            Initialize(typeof(T7));
+            if (Initialize(typeof(T7), out var instance)) t7 = (T7) instance;
         }
     }
 
     public abstract class SingletonManager<T1, T2, T3, T4, T5, T6, T7, T8> : SingletonManager<T1, T2, T3, T4, T5, T6, T7>
     {
+        protected T8 t8;
+
         protected override void Awake()
         {
             base.Awake();
-            Initialize(typeof(T8));
+            if (Initialize(typeof(T8), out var instance)) t8 = (T8) instance;
         }
     }
 
     public abstract class SingletonManager<T1, T2, T3, T4, T5, T6, T7, T8, T9> : SingletonManager<T1, T2, T3, T4, T5, T6, T7, T8>
     {
+        protected T9 t9;
+
         protected override void Awake()
         {
             base.Awake();
-            Initialize(typeof(T9));
+            if (Initialize(typeof(T9), out var instance)) t9 = (T9) instance;
         }
     }
 
     public abstract class SingletonManager<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> : SingletonManager<T1, T2, T3, T4, T5, T6, T7, T8, T9>
     {
+        protected T10 t10;
+
         protected override void Awake()
         {
             base.Awake();
-            Initialize(typeof(T10));
+            if (Initialize(typeof(T10), out var instance)) t10 = (T10) instance;
         }
     }
 
     public abstract class SingletonManager<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> : SingletonManager<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     {
+        protected T11 t11;
+
         protected override void Awake()
         {
             base.Awake();
-            Initialize(typeof(T11));
+            if (Initialize(typeof(T11), out var instance)) t11 = (T11) instance;
         }
     }
 
     public abstract class SingletonManager<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> : SingletonManager<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
     {
+        protected T12 t12;
+
         protected override void Awake()
         {
             base.Awake();
-            Initialize(typeof(T12));
+            if (Initialize(typeof(T12), out var instance)) t12 = (T12) instance;
         }
     }
 
     public abstract class SingletonManager<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> : SingletonManager<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
     {
+        protected T13 t13;
+
         protected override void Awake()
         {
             base.Awake();
-            Initialize(typeof(T13));
+            if (Initialize(typeof(T13), out var instance)) t13 = (T13) instance;
         }
     }
 
     public abstract class SingletonManager<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> : SingletonManager<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
     {
+        protected T14 t14;
+
         protected override void Awake()
         {
             base.Awake();
-            Initialize(typeof(T14));
+            if (Initialize(typeof(T14), out var instance)) t14 = (T14) instance;
         }
     }
 
     public abstract class SingletonManager<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> : SingletonManager<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
     {
+        protected T15 t15;
+
         protected override void Awake()
         {
             base.Awake();
-            Initialize(typeof(T15));
+            if (Initialize(typeof(T15), out var instance)) t15 = (T15) instance;
         }
     }
 
     public abstract class SingletonManager<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> : SingletonManager<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
     {
+        protected T16 t16;
+
         protected override void Awake()
         {
             base.Awake();
-            Initialize(typeof(T16));
+            if (Initialize(typeof(T16), out var instance)) t16 = (T16) instance;
         }
     }
 }
