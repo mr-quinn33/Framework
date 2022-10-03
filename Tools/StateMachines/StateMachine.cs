@@ -4,7 +4,7 @@ namespace Framework.Tools.StateMachines
 {
     public abstract class StateMachine : IStateMachine
     {
-        protected IState currentState;
+        private IState currentState;
 
         public void Update()
         {
@@ -18,7 +18,7 @@ namespace Framework.Tools.StateMachines
 
         public void Transit(IState state)
         {
-            currentState.OnExit();
+            currentState?.OnExit();
             currentState = state;
             currentState.OnEnter();
         }
@@ -26,7 +26,7 @@ namespace Framework.Tools.StateMachines
 
     public abstract class StateMachine<T> : IStateMachine<T> where T : IState
     {
-        protected T currentState;
+        private T currentState;
 
         public void Update()
         {
@@ -40,7 +40,7 @@ namespace Framework.Tools.StateMachines
 
         public void Transit(T state)
         {
-            currentState.OnExit();
+            currentState?.OnExit();
             currentState = state;
             currentState.OnEnter();
         }
