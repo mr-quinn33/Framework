@@ -1,6 +1,8 @@
-﻿namespace Framework.Tools.StateMachines.States
+﻿using Framework.Tools.Delegations.Commands;
+
+namespace Framework.Tools.StateMachines.States
 {
-    public interface IState
+    public interface IState : IDelegateSendCommand
     {
         void OnEnter();
 
