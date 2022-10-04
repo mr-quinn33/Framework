@@ -70,7 +70,7 @@ namespace Framework.Tools.ScriptableObjects.Nested
 
         protected TChild GetChildEditor<TChild>() where TChild : ChildSO
         {
-            return parentSO?.GetChild<TChild>();
+            return parentSO?.GetChildEditor<TChild>();
         }
 
         protected IEnumerable<ChildSO> GetChildrenEditor()

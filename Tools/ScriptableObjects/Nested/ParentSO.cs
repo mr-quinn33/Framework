@@ -19,6 +19,10 @@ namespace Framework.Tools.ScriptableObjects.Nested
 
         TChild GetChild<TChild>() where TChild : T;
 
+#if UNITY_EDITOR
+        TChild GetChildEditor<TChild>() where TChild : T;
+#endif
+
         bool Remove(T child, string childAssetAddress);
     }
 
@@ -38,6 +42,13 @@ namespace Framework.Tools.ScriptableObjects.Nested
             return Children.FirstOrDefault(child => child.GetType() == typeof(TChild)) as TChild;
         }
 
+#if UNITY_EDITOR
+        public TChild GetChildEditor<TChild>() where TChild : T
+        {
+            return Children.FirstOrDefault(child => child.GetType() == typeof(TChild)) as TChild;
+        }
+#endif
+
         public bool Remove(T child, string childAssetAddress)
         {
             return Children.Remove(child) && childAssetAddressList.Remove(childAssetAddress);
@@ -45,10 +56,16 @@ namespace Framework.Tools.ScriptableObjects.Nested
 
         private void MaskSureChildren()
         {
-            if (Children.Count > 0 && Children.All(child => child != null)) return;
 #if ADDRESSABLES
+            if (Children.Count > 0 && Children.All(child => child != null)) return;
             Children.Clear();
-            foreach (var childAssetAddress in childAssetAddressList) Children.Add(Addressables.LoadAssetAsync<T>(childAssetAddress).WaitForCompletion());
+            foreach (var address in childAssetAddressList)
+            {
+                var handle = Addressables.LoadAssetAsync<T>(address);
+                var asset = handle.WaitForCompletion();
+                if (!Children.Contains(asset)) Children.Add(asset);
+                Addressables.Release(handle);
+            }
 #endif
         }
 
