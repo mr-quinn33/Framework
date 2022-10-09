@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 #if ADDRESSABLES
@@ -13,7 +14,14 @@ using UnityEditor;
 
 namespace Framework.Tools.ScriptableObjects.Nested
 {
-    public interface IChildSO<T> where T : ScriptableObject, IChildSO<T>
+    public interface IChildSO
+    {
+#if ADDRESSABLES
+        IEnumerator MakeSureParentAsync();
+#endif
+    }
+
+    public interface IChildSO<T> : IChildSO where T : ScriptableObject, IChildSO<T>
     {
         void Initialize(IParentSO<T> parentSO, string parentAssetAddress);
     }
@@ -47,19 +55,20 @@ namespace Framework.Tools.ScriptableObjects.Nested
             this.parentAssetAddress = parentAssetAddress;
         }
 
+#if ADDRESSABLES
+        public IEnumerator MakeSureParentAsync()
+        {
+            if (parentSO != null) yield break;
+            var handle = Addressables.LoadAssetAsync<IParentSO<ChildSO>>(parentAssetAddress);
+            yield return handle;
+            parentSO = handle.Result;
+            Addressables.Release(handle);
+        }
+#endif
+
         protected TParent GetParent<TParent>() where TParent : class, IParentSO<ChildSO>
         {
             return ParentSO as TParent;
-        }
-
-        protected TChild GetChild<TChild>() where TChild : ChildSO
-        {
-            return ParentSO.GetChild<TChild>();
-        }
-
-        protected IEnumerable<ChildSO> GetChildren()
-        {
-            return ParentSO.Children;
         }
 
 #if UNITY_EDITOR

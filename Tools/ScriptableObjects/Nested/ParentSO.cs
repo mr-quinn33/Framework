@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 #if ADDRESSABLES
@@ -13,11 +14,16 @@ using UnityEditor;
 
 namespace Framework.Tools.ScriptableObjects.Nested
 {
-    public interface IParentSO<T> where T : ScriptableObject, IChildSO<T>
+    public interface IParentSO
+    {
+#if ADDRESSABLES
+        IEnumerator MaskSureChildrenAsync(Addressables.MergeMode mergeMode);
+#endif
+    }
+
+    public interface IParentSO<T> : IParentSO where T : ScriptableObject, IChildSO<T>
     {
         IList<T> Children { get; }
-
-        TChild GetChild<TChild>() where TChild : T;
 
 #if UNITY_EDITOR
         TChild GetChildEditor<TChild>() where TChild : T;
@@ -34,13 +40,9 @@ namespace Framework.Tools.ScriptableObjects.Nested
         [SerializeField]
         private List<string> childAssetAddressList;
 
-        public IList<T> Children { get; } = new List<T>();
+        private bool IsChildrenValid => Children.Count == childAssetAddressList.Count && Children.All(child => child != null);
 
-        public TChild GetChild<TChild>() where TChild : T
-        {
-            MaskSureChildren();
-            return Children.FirstOrDefault(child => child.GetType() == typeof(TChild)) as TChild;
-        }
+        public IList<T> Children { get; } = new List<T>();
 
 #if UNITY_EDITOR
         public TChild GetChildEditor<TChild>() where TChild : T
@@ -54,16 +56,35 @@ namespace Framework.Tools.ScriptableObjects.Nested
             return Children.Remove(child) && childAssetAddressList.Remove(childAssetAddress);
         }
 
+#if ADDRESSABLES
+        public IEnumerator MaskSureChildrenAsync(Addressables.MergeMode mergeMode)
+        {
+            if (IsChildrenValid || childAssetAddressList.Count == 0) yield break;
+            Children.Clear();
+            var handle = Addressables.LoadAssetsAsync<T>(childAssetAddressList, t =>
+            {
+                if (!Children.Contains(t)) Children.Add(t);
+            }, mergeMode);
+            yield return handle;
+            foreach (var child in Children) yield return child.MakeSureParentAsync();
+            Addressables.Release(handle);
+        }
+#endif
+
+        protected TChild GetChild<TChild>() where TChild : T
+        {
+            MaskSureChildren();
+            return Children.FirstOrDefault(child => child.GetType() == typeof(TChild)) as TChild;
+        }
+
         private void MaskSureChildren()
         {
 #if ADDRESSABLES
-            if (Children.Count > 0 && Children.All(child => child != null)) return;
+            if (IsChildrenValid) return;
             Children.Clear();
-            foreach (var address in childAssetAddressList)
+            foreach (var handle in childAssetAddressList.Select(Addressables.LoadAssetAsync<T>))
             {
-                var handle = Addressables.LoadAssetAsync<T>(address);
-                var asset = handle.WaitForCompletion();
-                if (!Children.Contains(asset)) Children.Add(asset);
+                Children.Add(handle.WaitForCompletion());
                 Addressables.Release(handle);
             }
 #endif
