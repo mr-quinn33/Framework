@@ -1,9 +1,9 @@
-﻿using Framework.Tools.Delegations.Commands;
+﻿using Framework.Tools.Delegators;
 using Framework.Tools.StateMachines.States;
 
 namespace Framework.Tools.StateMachines
 {
-    public abstract class StateMachine : CommandDelegation, IStateMachine
+    public abstract class StateMachine : SendCommandDelegator, IStateMachine
     {
         private IState currentState;
 
@@ -25,7 +25,7 @@ namespace Framework.Tools.StateMachines
         }
     }
 
-    public abstract class StateMachine<T> : CommandDelegation, IStateMachine<T> where T : IState
+    public abstract class StateMachine<T> : SendCommandDelegator, IStateMachine<T> where T : IState
     {
         private T currentState;
 

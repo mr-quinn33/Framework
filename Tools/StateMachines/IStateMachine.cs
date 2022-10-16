@@ -1,9 +1,9 @@
-﻿using Framework.Tools.Delegations.Commands;
+﻿using Framework.Tools.Delegators;
 using Framework.Tools.StateMachines.States;
 
 namespace Framework.Tools.StateMachines
 {
-    public interface IStateMachine : ICommandDelegation
+    public interface IStateMachine : ISendCommandDelegator
     {
         void Update();
 
@@ -12,7 +12,7 @@ namespace Framework.Tools.StateMachines
         void Transit(IState state);
     }
 
-    public interface IStateMachine<in T> : ICommandDelegation where T : IState
+    public interface IStateMachine<in T> : ISendCommandDelegator where T : IState
     {
         void Update();
 
