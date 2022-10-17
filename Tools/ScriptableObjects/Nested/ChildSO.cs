@@ -92,7 +92,7 @@ namespace Framework.Tools.ScriptableObjects.Nested
         [ContextMenu(nameof(Destroy))]
         private void Destroy()
         {
-            var assetAddress = parentAssetAddress + $"[{GetType().Name}]";
+            var assetAddress = $"{parentAssetAddress}[{GetType().Name}]";
             if (ParentSO.Remove(this, assetAddress))
             {
                 Undo.DestroyObjectImmediate(this);

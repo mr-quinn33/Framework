@@ -250,7 +250,7 @@ namespace Framework.GameModes
 
         public static T Load()
         {
-            if (!Initialized) Constructor();
+            if (!Initialized) CreateInstance();
             return (T) Instances[typeof(T)];
         }
 
@@ -285,7 +285,7 @@ namespace Framework.GameModes
             coreContainer.Register<TUtility>(utility);
         }
 
-        private static void Constructor()
+        private static void CreateInstance()
         {
             if (Initialized) return;
             var instance = new T();

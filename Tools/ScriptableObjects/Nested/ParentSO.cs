@@ -25,11 +25,11 @@ namespace Framework.Tools.ScriptableObjects.Nested
     {
         IList<T> Children { get; }
 
+        bool Remove(T child, string childAssetAddress);
+
 #if UNITY_EDITOR
         TChild GetChildEditor<TChild>() where TChild : T;
 #endif
-
-        bool Remove(T child, string childAssetAddress);
     }
 
     public abstract class ParentSO<T> : ScriptableObject, IParentSO<T> where T : ScriptableObject, IChildSO<T>
@@ -44,26 +44,28 @@ namespace Framework.Tools.ScriptableObjects.Nested
 
         public IList<T> Children { get; } = new List<T>();
 
-#if UNITY_EDITOR
-        public TChild GetChildEditor<TChild>() where TChild : T
-        {
-            return Children.FirstOrDefault(child => child.GetType() == typeof(TChild)) as TChild;
-        }
-#endif
-
         public bool Remove(T child, string childAssetAddress)
         {
             return Children.Remove(child) && childAssetAddressList.Remove(childAssetAddress);
         }
 
+#if UNITY_EDITOR
+        public TChild GetChildEditor<TChild>() where TChild : T
+        {
+            MaskSureChildrenEditor();
+            return Children.FirstOrDefault(child => child is TChild) as TChild;
+        }
+#endif
+
 #if ADDRESSABLES
         public IEnumerator MaskSureChildrenAsync(Addressables.MergeMode mergeMode)
         {
-            if (IsChildrenValid || childAssetAddressList.Count == 0) yield break;
+            if (childAssetAddressList.Count == 0 || IsChildrenValid) yield break;
             Children.Clear();
             var handle = Addressables.LoadAssetsAsync<T>(childAssetAddressList, t =>
             {
-                if (!Children.Contains(t)) Children.Add(t);
+                if (Children.Contains(t)) return;
+                Children.Add(t);
             }, mergeMode);
             yield return handle;
             foreach (var child in Children) yield return child.MakeSureParentAsync();
@@ -73,22 +75,21 @@ namespace Framework.Tools.ScriptableObjects.Nested
 
         protected TChild GetChild<TChild>() where TChild : T
         {
-            MaskSureChildren();
-            return Children.FirstOrDefault(child => child.GetType() == typeof(TChild)) as TChild;
+            return Children.FirstOrDefault(child => child is TChild) as TChild;
         }
 
-        private void MaskSureChildren()
+#if UNITY_EDITOR && ADDRESSABLES
+        private void MaskSureChildrenEditor()
         {
-#if ADDRESSABLES
-            if (IsChildrenValid) return;
+            if (childAssetAddressList == null || childAssetAddressList.Count == 0 || IsChildrenValid) return;
             Children.Clear();
             foreach (var handle in childAssetAddressList.Select(Addressables.LoadAssetAsync<T>))
             {
                 Children.Add(handle.WaitForCompletion());
                 Addressables.Release(handle);
             }
-#endif
         }
+#endif
 
 #if UNITY_EDITOR
         protected void CreateChild<TChild>() where TChild : T
@@ -96,7 +97,7 @@ namespace Framework.Tools.ScriptableObjects.Nested
             var assetAddress = AssetDatabase.GetAssetPath(this);
             var child = CreateInstance<TChild>();
             var childName = typeof(TChild).Name;
-            var childAssetAddress = assetAddress + $"[{childName}]";
+            var childAssetAddress = $"{assetAddress}[{childName}]";
             child.name = childName;
             child.Initialize(this, assetAddress);
             childAssetAddressList.Add(childAssetAddress);
@@ -111,11 +112,10 @@ namespace Framework.Tools.ScriptableObjects.Nested
 
         protected void DestroyChildren<TChild>() where TChild : T
         {
-            var assetAddress = AssetDatabase.GetAssetPath(this);
             for (var i = Children.Count - 1; i >= 0; i--)
             {
                 var child = Children[i];
-                var childAssetAddress = assetAddress + $"[{child.GetType().Name}]";
+                var childAssetAddress = childAssetAddressList[i];
                 if (child is TChild && Remove(child, childAssetAddress)) Undo.DestroyObjectImmediate(child);
             }
 
@@ -126,6 +126,7 @@ namespace Framework.Tools.ScriptableObjects.Nested
         [OnInspectorInit]
         private void LogChildSO()
         {
+            MaskSureChildrenEditor();
             foreach (var childSO in Children) Debug.LogFormat("{0}: {1}", nameof(LogChildSO), childSO);
         }
 #endif
