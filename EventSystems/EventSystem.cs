@@ -4,7 +4,7 @@ using Framework.Interfaces;
 
 namespace Framework.EventSystems
 {
-    public interface IEventSystem
+    internal interface IEventSystem
     {
         IUnregisterHandler Register<T>(Action<T> action);
 
@@ -25,7 +25,7 @@ namespace Framework.EventSystems
         void Clear();
     }
 
-    public class EventSystem : IEventSystem
+    internal class EventSystem : IEventSystem
     {
         private readonly IDictionary<Type, IRegistration> registrations = new Dictionary<Type, IRegistration>();
 
@@ -67,7 +67,7 @@ namespace Framework.EventSystems
 
         void IEventSystem.Invoke<T>(T t)
         {
-            if (registrations.TryGetValue(typeof(T), out var value) && value is IActionRegistration<T> registration) registration.Action?.Invoke(t);
+            if (registrations.TryGetValue(typeof(T), out var value) && value is IActionRegistration<T> {Action: { }} registration) registration.Action.Invoke(t);
         }
 
         void IEventSystem.Invoke<T>()

@@ -1,6 +1,6 @@
 namespace Framework.EventSystems
 {
-    public interface IRegistration
+    internal interface IRegistration
     {
     }
 }
