@@ -17,7 +17,7 @@ namespace Framework.Tools.ScriptableObjects.Nested
     public interface IParentSO
     {
 #if ADDRESSABLES
-        IEnumerator MaskSureChildrenAsync(Addressables.MergeMode mergeMode);
+        IEnumerator MaskSureChildrenAsync(Addressables.MergeMode mergeMode = Addressables.MergeMode.Union);
 #endif
     }
 
@@ -58,7 +58,7 @@ namespace Framework.Tools.ScriptableObjects.Nested
 #endif
 
 #if ADDRESSABLES
-        public IEnumerator MaskSureChildrenAsync(Addressables.MergeMode mergeMode)
+        public IEnumerator MaskSureChildrenAsync(Addressables.MergeMode mergeMode = Addressables.MergeMode.Union)
         {
             if (childAssetAddressList.Count == 0 || IsChildrenValid) yield break;
             Children.Clear();
@@ -78,9 +78,9 @@ namespace Framework.Tools.ScriptableObjects.Nested
             return Children.FirstOrDefault(child => child is TChild) as TChild;
         }
 
-#if UNITY_EDITOR && ADDRESSABLES
         private void MaskSureChildrenEditor()
         {
+#if UNITY_EDITOR && ADDRESSABLES
             if (childAssetAddressList == null || childAssetAddressList.Count == 0 || IsChildrenValid) return;
             Children.Clear();
             foreach (var handle in childAssetAddressList.Select(Addressables.LoadAssetAsync<T>))
@@ -88,8 +88,8 @@ namespace Framework.Tools.ScriptableObjects.Nested
                 Children.Add(handle.WaitForCompletion());
                 Addressables.Release(handle);
             }
-        }
 #endif
+        }
 
 #if UNITY_EDITOR
         protected void CreateChild<TChild>() where TChild : T
