@@ -2,7 +2,7 @@
 
 namespace Framework.Tools.StateMachines.States
 {
-    public interface IState : ICanSendCommand
+    public interface IState : IDelegateSendCommand, IDelegateSendCommandAsync
     {
         void OnEnter();
 

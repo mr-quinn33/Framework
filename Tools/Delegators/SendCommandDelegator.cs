@@ -5,7 +5,7 @@ using Framework.Interfaces;
 
 namespace Framework.Tools.Delegators
 {
-    public interface ISendCommandDelegator : ICanSendCommand, ICanSendCommandAsync
+    public interface ISendCommandDelegator : IDelegateSendCommand, IDelegateSendCommandAsync
     {
         IUnregisterHandler RegisterOnSendCommand(Action<ICommand> action);
 
@@ -40,23 +40,23 @@ namespace Framework.Tools.Delegators
             OnSendCommandAsync -= func;
         }
 
-        void ICanSendCommand.SendCommand<T>(T command)
+        void IDelegateSendCommand.SendCommand<T>(T command)
         {
             OnSendCommand?.Invoke(command);
         }
 
-        void ICanSendCommand.SendCommand<T>()
+        void IDelegateSendCommand.SendCommand<T>()
         {
             OnSendCommand?.Invoke(new T());
         }
 
-        async Task ICanSendCommandAsync.SendCommandAsync<T>(T command)
+        async Task IDelegateSendCommandAsync.SendCommandAsync<T>(T command)
         {
             if (OnSendCommandAsync == null) await Task.CompletedTask;
             else await OnSendCommandAsync.Invoke(command);
         }
 
-        async Task ICanSendCommandAsync.SendCommandAsync<T>()
+        async Task IDelegateSendCommandAsync.SendCommandAsync<T>()
         {
             if (OnSendCommandAsync == null) await Task.CompletedTask;
             else await OnSendCommandAsync.Invoke(new T());

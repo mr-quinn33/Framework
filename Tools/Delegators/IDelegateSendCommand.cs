@@ -2,7 +2,7 @@
 
 namespace Framework.Tools.Delegators
 {
-    public interface ICanSendCommand
+    public interface IDelegateSendCommand
     {
         void SendCommand<T>(T command) where T : ICommand;
 

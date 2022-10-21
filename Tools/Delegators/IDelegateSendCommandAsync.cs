@@ -3,7 +3,7 @@ using Framework.Commands;
 
 namespace Framework.Tools.Delegators
 {
-    public interface ICanSendCommandAsync
+    public interface IDelegateSendCommandAsync
     {
         Task SendCommandAsync<T>(T command) where T : ICommandAsync;
 
