@@ -15,7 +15,7 @@ namespace Framework.Scripts.Managers
 
         protected bool Initialize(Type type, out object instance)
         {
-            var propertyInfo = type.GetProperty("Instance", BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Static | BindingFlags.GetProperty);
+            var propertyInfo = type.GetProperty("Instance", BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Static);
             if (propertyInfo != null)
             {
                 instance = propertyInfo.GetValue(null);
