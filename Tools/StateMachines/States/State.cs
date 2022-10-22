@@ -1,4 +1,5 @@
-﻿using Framework.Commands;
+﻿using System.Threading.Tasks;
+using Framework.Commands;
 
 namespace Framework.Tools.StateMachines.States
 {
@@ -19,6 +20,16 @@ namespace Framework.Tools.StateMachines.States
         public void SendCommand<T>() where T : ICommand, new()
         {
             stateMachine.SendCommand<T>();
+        }
+
+        public async Task SendCommandAsync<T>(T command) where T : ICommandAsync
+        {
+            await stateMachine.SendCommandAsync(command);
+        }
+
+        public async Task SendCommandAsync<T>() where T : ICommandAsync, new()
+        {
+            await stateMachine.SendCommandAsync<T>();
         }
 
         public abstract void OnEnter();
@@ -47,6 +58,16 @@ namespace Framework.Tools.StateMachines.States
         public void SendCommand<TCommand>() where TCommand : ICommand, new()
         {
             stateMachine.SendCommand<TCommand>();
+        }
+
+        public async Task SendCommandAsync<TCommand>(TCommand command) where TCommand : ICommandAsync
+        {
+            await stateMachine.SendCommandAsync(command);
+        }
+
+        public async Task SendCommandAsync<TCommand>() where TCommand : ICommandAsync, new()
+        {
+            await stateMachine.SendCommandAsync<TCommand>();
         }
 
         public abstract void OnEnter();
