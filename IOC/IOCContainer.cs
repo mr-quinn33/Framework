@@ -42,17 +42,12 @@ namespace Framework.IOC
 
         void IIOCContainer.Register<T>(object instance)
         {
-            var type = typeof(T);
-            if (registeredInstances.ContainsKey(type)) registeredInstances[type] = instance;
-            else registeredInstances.Add(type, instance);
+            registeredInstances[typeof(T)] = instance;
         }
 
         void IIOCContainer.Register<TParent, TChild>()
         {
-            var parentType = typeof(TParent);
-            var childType = typeof(TChild);
-            if (registeredDependencies.ContainsKey(parentType)) registeredDependencies[parentType] = childType;
-            else registeredDependencies.Add(parentType, childType);
+            registeredDependencies[typeof(TParent)] = typeof(TChild);
         }
 
         T IIOCContainer.Resolve<T>()
@@ -80,7 +75,7 @@ namespace Framework.IOC
         {
             if (registeredInstances.ContainsKey(type)) return registeredInstances[type];
             if (registeredTypes.Contains(type)) return Activator.CreateInstance(type);
-            return registeredDependencies.ContainsKey(type) ? Activator.CreateInstance(registeredDependencies[type]) : default;
+            return registeredDependencies.ContainsKey(type) ? Activator.CreateInstance(registeredDependencies[type]) : null;
         }
     }
 }
