@@ -136,19 +136,16 @@ namespace Framework.Tools.Pathfinding
 
         public IReadOnlyList<T> GetNeighbours(int x, int y, bool includeDiagonals)
         {
-            var result = new List<T>();
+            var result = new List<T>(8);
             if (IsWithinBounds(x - 1, y)) result.Add(array[x - 1, y]);
             if (IsWithinBounds(x + 1, y)) result.Add(array[x + 1, y]);
             if (IsWithinBounds(x, y - 1)) result.Add(array[x, y - 1]);
             if (IsWithinBounds(x, y + 1)) result.Add(array[x, y + 1]);
-            if (includeDiagonals)
-            {
-                if (IsWithinBounds(x - 1, y - 1)) result.Add(array[x - 1, y - 1]);
-                if (IsWithinBounds(x + 1, y - 1)) result.Add(array[x + 1, y - 1]);
-                if (IsWithinBounds(x - 1, y + 1)) result.Add(array[x - 1, y + 1]);
-                if (IsWithinBounds(x + 1, y + 1)) result.Add(array[x + 1, y + 1]);
-            }
-
+            if (!includeDiagonals) return result;
+            if (IsWithinBounds(x - 1, y - 1)) result.Add(array[x - 1, y - 1]);
+            if (IsWithinBounds(x + 1, y - 1)) result.Add(array[x + 1, y - 1]);
+            if (IsWithinBounds(x - 1, y + 1)) result.Add(array[x - 1, y + 1]);
+            if (IsWithinBounds(x + 1, y + 1)) result.Add(array[x + 1, y + 1]);
             return result;
         }
 

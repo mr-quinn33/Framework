@@ -21,13 +21,13 @@ namespace Framework.Tools.Delegators
         IUnregisterHandler ISendCommandDelegator.RegisterOnSendCommand(Action<ICommand> action)
         {
             OnSendCommand += action;
-            return new OnSendCommandUnregisterHandler(this, action);
+            return new SendCommandUnregisterHandler(this, action);
         }
 
         IUnregisterHandler ISendCommandDelegator.RegisterOnSendCommandAsync(Func<ICommandAsync, Task> func)
         {
             OnSendCommandAsync += func;
-            return new OnSendCommandAsyncUnregisterHandler(this, func);
+            return new SendCommandAsyncUnregisterHandler(this, func);
         }
 
         void ISendCommandDelegator.UnregisterOnSendCommand(Action<ICommand> action)
@@ -66,12 +66,12 @@ namespace Framework.Tools.Delegators
 
         private event Func<ICommandAsync, Task> OnSendCommandAsync;
 
-        private class OnSendCommandUnregisterHandler : IUnregisterHandler
+        private class SendCommandUnregisterHandler : IUnregisterHandler
         {
             private Action<ICommand> action;
             private ISendCommandDelegator sendCommandDelegator;
 
-            public OnSendCommandUnregisterHandler(ISendCommandDelegator sendCommandDelegator, Action<ICommand> action)
+            public SendCommandUnregisterHandler(ISendCommandDelegator sendCommandDelegator, Action<ICommand> action)
             {
                 this.sendCommandDelegator = sendCommandDelegator;
                 this.action = action;
@@ -85,12 +85,12 @@ namespace Framework.Tools.Delegators
             }
         }
 
-        private class OnSendCommandAsyncUnregisterHandler : IUnregisterHandler
+        private class SendCommandAsyncUnregisterHandler : IUnregisterHandler
         {
             private Func<ICommandAsync, Task> func;
             private ISendCommandDelegator sendCommandDelegator;
 
-            public OnSendCommandAsyncUnregisterHandler(ISendCommandDelegator sendCommandDelegator, Func<ICommandAsync, Task> func)
+            public SendCommandAsyncUnregisterHandler(ISendCommandDelegator sendCommandDelegator, Func<ICommandAsync, Task> func)
             {
                 this.sendCommandDelegator = sendCommandDelegator;
                 this.func = func;
