@@ -11,6 +11,8 @@ namespace Framework.Tools.Pathfinding
 
         T this[int x, int y] { get; }
 
+        T this[Vector2Int pos] { get; }
+
         bool IsWithinBounds(int x, int y);
 
         bool IsWithinBounds(Vector2Int coordinate);
@@ -30,11 +32,11 @@ namespace Framework.Tools.Pathfinding
     {
         new T this[int x, int y] { get; set; }
 
-        T this[Vector2Int coordinate] { get; set; }
+        new T this[Vector2Int coordinate] { get; set; }
 
-        IUnregisterHandler RegisterOnValueChanged(Action<IReadOnlyGrid2D<T>, int, int, bool> action);
+        IUnregisterHandler RegisterOnValueChanged(Action<IReadOnlyGrid2D<T>, int, int, bool, int, int> action);
 
-        void UnregisterOnValueChanged(Action<IReadOnlyGrid2D<T>, int, int, bool> action);
+        void UnregisterOnValueChanged(Action<IReadOnlyGrid2D<T>, int, int, bool, int, int> action);
 
         bool Remove(T t);
 
@@ -54,15 +56,15 @@ namespace Framework.Tools.Pathfinding
             array = new T[width, height];
         }
 
+        public Grid2D(Vector2Int size) : this(size.x, size.y)
+        {
+        }
+
         public Grid2D(int width, int height, Func<int, int, T> func) : this(width, height)
         {
             for (var x = 0; x < width; x++)
             for (var y = 0; y < height; y++)
                 array[x, y] = func(x, y);
-        }
-
-        public Grid2D(Vector2Int size) : this(size.x, size.y)
-        {
         }
 
         public T this[int x, int y]
@@ -73,9 +75,9 @@ namespace Framework.Tools.Pathfinding
                 if (!IsWithinBounds(x, y)) return;
                 if (value == null && array[x, y] == null) return;
                 if (value != null && value.Equals(array[x, y])) return;
-                var isGridContainsValue = Contains(value);
+                var isGridContainsValue = Contains(value, out var oldX, out var oldY);
                 array[x, y] = value;
-                OnValueChanged?.Invoke(this, x, y, isGridContainsValue);
+                OnValueChanged?.Invoke(this, x, y, isGridContainsValue, oldX, oldY);
             }
         }
 
@@ -97,13 +99,13 @@ namespace Framework.Tools.Pathfinding
             Array.Clear(array, 0, array.Length);
         }
 
-        public IUnregisterHandler RegisterOnValueChanged(Action<IReadOnlyGrid2D<T>, int, int, bool> action)
+        public IUnregisterHandler RegisterOnValueChanged(Action<IReadOnlyGrid2D<T>, int, int, bool, int, int> action)
         {
             OnValueChanged += action;
             return new Grid2DOnValueChangedUnregisterHandler(this, action);
         }
 
-        public void UnregisterOnValueChanged(Action<IReadOnlyGrid2D<T>, int, int, bool> action)
+        public void UnregisterOnValueChanged(Action<IReadOnlyGrid2D<T>, int, int, bool, int, int> action)
         {
             OnValueChanged -= action;
         }
@@ -137,21 +139,24 @@ namespace Framework.Tools.Pathfinding
         public IReadOnlyList<T> GetNeighbours(int x, int y, bool includeDiagonals)
         {
             var result = new List<T>(8);
-            if (IsWithinBounds(x - 1, y)) result.Add(array[x - 1, y]);
+            if (includeDiagonals)
+            {
+                if (IsWithinBounds(x + 1, y + 1)) result.Add(array[x + 1, y + 1]);
+                if (IsWithinBounds(x - 1, y + 1)) result.Add(array[x - 1, y + 1]);
+                if (IsWithinBounds(x - 1, y - 1)) result.Add(array[x - 1, y - 1]);
+                if (IsWithinBounds(x + 1, y - 1)) result.Add(array[x + 1, y - 1]);
+            }
+
             if (IsWithinBounds(x + 1, y)) result.Add(array[x + 1, y]);
-            if (IsWithinBounds(x, y - 1)) result.Add(array[x, y - 1]);
             if (IsWithinBounds(x, y + 1)) result.Add(array[x, y + 1]);
-            if (!includeDiagonals) return result;
-            if (IsWithinBounds(x - 1, y - 1)) result.Add(array[x - 1, y - 1]);
-            if (IsWithinBounds(x + 1, y - 1)) result.Add(array[x + 1, y - 1]);
-            if (IsWithinBounds(x - 1, y + 1)) result.Add(array[x - 1, y + 1]);
-            if (IsWithinBounds(x + 1, y + 1)) result.Add(array[x + 1, y + 1]);
+            if (IsWithinBounds(x - 1, y)) result.Add(array[x - 1, y]);
+            if (IsWithinBounds(x, y - 1)) result.Add(array[x, y - 1]);
             return result;
         }
 
         public IReadOnlyList<T> GetNeighbours(T t, bool includeDiagonals)
         {
-            return !Contains(t, out var x, out var y) ? null : GetNeighbours(x, y, includeDiagonals);
+            return Contains(t, out var x, out var y) ? GetNeighbours(x, y, includeDiagonals) : Array.Empty<T>();
         }
 
         public Vector2Int Size => new(width, height);
@@ -166,14 +171,14 @@ namespace Framework.Tools.Pathfinding
             return IsWithinBounds(coordinate.x, coordinate.y);
         }
 
-        private event Action<IReadOnlyGrid2D<T>, int, int, bool> OnValueChanged;
+        private event Action<IReadOnlyGrid2D<T>, int, int, bool, int, int> OnValueChanged;
 
         private class Grid2DOnValueChangedUnregisterHandler : IUnregisterHandler
         {
-            private Action<IReadOnlyGrid2D<T>, int, int, bool> action;
+            private Action<IReadOnlyGrid2D<T>, int, int, bool, int, int> action;
             private Grid2D<T> grid2D;
 
-            public Grid2DOnValueChangedUnregisterHandler(Grid2D<T> grid2D, Action<IReadOnlyGrid2D<T>, int, int, bool> action)
+            public Grid2DOnValueChangedUnregisterHandler(Grid2D<T> grid2D, Action<IReadOnlyGrid2D<T>, int, int, bool, int, int> action)
             {
                 this.action = action;
                 this.grid2D = grid2D;

@@ -1,76 +1,98 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Framework.Tools.Pathfinding
 {
     public interface IPathfinder
     {
-        IReadOnlyList<IPathNode> FindPath(int startX, int startY, int endX, int endY);
+        IReadOnlyList<IPathNode> FindPathNodes(int startX, int startY, int endX, int endY, bool includeDiagonals);
 
-        IReadOnlyList<IPathNode> FindPath(Vector2Int start, Vector2Int end);
+        IReadOnlyList<IPathNode> FindPathNodes(Vector2Int start, Vector2Int end, bool includeDiagonals);
+
+        IReadOnlyList<Vector2Int> FindPath(int startX, int startY, int endX, int endY, bool includeDiagonals);
+
+        IReadOnlyList<Vector2Int> FindPath(Vector2Int start, Vector2Int end, bool includeDiagonals);
+
+        void SetIsWalkable(int x, int y, bool isWalkable);
     }
 
     public class Pathfinder : IPathfinder
     {
+        private const float Sqrt2 = 1.4142135f;
         private readonly IGrid2D<IPathNode> grid;
-        private HashSet<IPathNode> closedNodes;
-        private IList<IPathNode> openNodes;
-        private SortedSet<IPathNode> sortedSet;
+        private readonly IList<IPathNode> openNodes;
+        private readonly HashSet<IPathNode> closedNodes;
 
         public Pathfinder(int width, int height)
         {
             grid = new Grid2D<IPathNode>(width, height, (x, y) => new PathNode(x, y));
+            openNodes = new List<IPathNode>();
+            closedNodes = new HashSet<IPathNode>();
         }
 
         public Pathfinder(Vector2Int size) : this(size.x, size.y)
         {
         }
 
-        public IReadOnlyList<IPathNode> FindPath(int startX, int startY, int endX, int endY)
+        public IReadOnlyList<IPathNode> FindPathNodes(int startX, int startY, int endX, int endY, bool includeDiagonals)
         {
+            if (!grid.IsWithinBounds(startX, startY) || !grid.IsWithinBounds(endX, endY)) return Array.Empty<IPathNode>();
+            InitializeGrid(grid.Size);
             var startNode = grid[startX, startY];
-            openNodes = new List<IPathNode> {startNode};
-            closedNodes = new HashSet<IPathNode>();
-            sortedSet = new SortedSet<IPathNode>();
-            InitializeGridNodes(grid.Size);
+            var endNode = grid[endX, endY];
+            closedNodes.Clear();
+            openNodes.Clear();
+            openNodes.Add(startNode);
             startNode.GCost = 0;
-            startNode.HCost = CalculateDistance(startNode, grid[endX, endY]);
+            startNode.HCost = PathfinderStaticMethods.CalculateDistance(startNode, endNode, includeDiagonals);
             while (openNodes.Count > 0)
             {
-                var currentNode = sortedSet.Min;
-                if (ReferenceEquals(currentNode, grid[endX, endY])) return CalculatePath(currentNode);
+                var currentNode = openNodes.Min();
+                if (ReferenceEquals(currentNode, endNode)) return PathfinderStaticMethods.CalculatePath(currentNode);
                 if (!openNodes.Remove(currentNode)) throw new PathNodeNotFoundException(currentNode);
-                if (!sortedSet.Remove(currentNode)) throw new PathNodeNotFoundException(currentNode);
-                closedNodes.Add(currentNode);
-                foreach (var neighbourNode in grid.GetNeighbours(currentNode, true))
+                if (!closedNodes.Add(currentNode)) throw new PathNodeAlreadyExistsException(currentNode);
+                foreach (var neighbourNode in grid.GetNeighbours(currentNode, includeDiagonals))
                 {
                     if (closedNodes.Contains(neighbourNode)) continue;
-                    if (!neighbourNode.IsWalkable)
-                    {
-                        closedNodes.Add(neighbourNode);
-                        continue;
-                    }
-
-                    var tentativeGCost = currentNode.GCost + CalculateDistance(currentNode, neighbourNode);
+                    if (!neighbourNode.IsWalkable && closedNodes.Add(neighbourNode)) continue;
+                    var tentativeGCost = currentNode.GCost + PathfinderStaticMethods.CalculateDistance(currentNode, neighbourNode, includeDiagonals);
                     if (tentativeGCost < neighbourNode.GCost)
                     {
                         neighbourNode.Parent = currentNode;
                         neighbourNode.GCost = tentativeGCost;
-                        neighbourNode.HCost = CalculateDistance(neighbourNode, grid[endX, endY]);
-                        if (sortedSet.Add(neighbourNode)) openNodes.Add(neighbourNode);
+                        neighbourNode.HCost = PathfinderStaticMethods.CalculateDistance(neighbourNode, endNode, includeDiagonals);
+                        if (!openNodes.Contains(neighbourNode)) openNodes.Add(neighbourNode);
                     }
                 }
             }
 
-            return null;
+            return Array.Empty<IPathNode>();
         }
 
-        public IReadOnlyList<IPathNode> FindPath(Vector2Int start, Vector2Int end)
+        public IReadOnlyList<IPathNode> FindPathNodes(Vector2Int start, Vector2Int end, bool includeDiagonals)
         {
-            return FindPath(start.x, start.y, end.x, end.y);
+            return FindPathNodes(start.x, start.y, end.x, end.y, includeDiagonals);
         }
 
-        private void InitializeGridNodes(Vector2Int size)
+        public IReadOnlyList<Vector2Int> FindPath(int startX, int startY, int endX, int endY, bool includeDiagonals)
+        {
+            var pathNodes = FindPathNodes(startX, startY, endX, endY, includeDiagonals);
+            return pathNodes.Count == 0 ? Array.Empty<Vector2Int>() : pathNodes.Select(node => node.Coordinate).ToArray();
+        }
+
+        public IReadOnlyList<Vector2Int> FindPath(Vector2Int start, Vector2Int end, bool includeDiagonals)
+        {
+            return FindPath(start.x, start.y, end.x, end.y, includeDiagonals);
+        }
+
+        public void SetIsWalkable(int x, int y, bool isWalkable)
+        {
+            grid[x, y].SetIsWalkable(isWalkable);
+        }
+
+        private void InitializeGrid(Vector2Int size)
         {
             for (var x = 0; x < size.x; x++)
             for (var y = 0; y < size.y; y++)
@@ -82,27 +104,26 @@ namespace Framework.Tools.Pathfinding
             }
         }
 
-        private static float CalculateDistance(IPathNode currentNode, IPathNode endNode)
+        private static class PathfinderStaticMethods
         {
-            var xDistance = Mathf.Abs(currentNode.X - endNode.X);
-            var yDistance = Mathf.Abs(currentNode.Y - endNode.Y);
-            var remaining = Mathf.Abs(xDistance - yDistance);
-            return Mathf.Sqrt(2) * Mathf.Min(xDistance, yDistance) + remaining;
-        }
-
-        private static IReadOnlyList<IPathNode> CalculatePath(IPathNode endNode)
-        {
-            var path = new LinkedList<IPathNode>();
-            var currentNode = endNode;
-            while (currentNode != null)
+            public static float CalculateDistance(IPathNode currentNode, IPathNode endNode, bool includeDiagonals)
             {
-                path.AddFirst(currentNode);
-                currentNode = currentNode.Parent;
+                var xDistance = Mathf.Abs(currentNode.X - endNode.X);
+                var yDistance = Mathf.Abs(currentNode.Y - endNode.Y);
+                if (!includeDiagonals) return xDistance + yDistance;
+                var remaining = Mathf.Abs(xDistance - yDistance);
+                return Sqrt2 * Mathf.Min(xDistance, yDistance) + remaining;
             }
 
-            var pathArray = new IPathNode[path.Count];
-            path.CopyTo(pathArray, 0);
-            return pathArray;
+            public static IReadOnlyList<IPathNode> CalculatePath(IPathNode endNode)
+            {
+                var path = new LinkedList<IPathNode>();
+                for (var currentNode = endNode; currentNode != null; currentNode = currentNode.Parent) path.AddFirst(currentNode);
+                path.RemoveFirst();
+                var pathArray = new IPathNode[path.Count];
+                path.CopyTo(pathArray, 0);
+                return pathArray;
+            }
         }
     }
 }
