@@ -20,7 +20,6 @@ namespace Framework.Tools.Pathfinding
 
     public class Pathfinder : IPathfinder
     {
-        private const float Sqrt2 = 1.4142135f;
         private readonly IGrid2D<IPathNode> grid;
         private readonly IList<IPathNode> openNodes;
         private readonly HashSet<IPathNode> closedNodes;
@@ -106,6 +105,8 @@ namespace Framework.Tools.Pathfinding
 
         private static class PathfinderStaticMethods
         {
+            private const float Sqrt2 = 1.4142135f;
+
             public static float CalculateDistance(IPathNode currentNode, IPathNode endNode, bool includeDiagonals)
             {
                 var xDistance = Mathf.Abs(currentNode.X - endNode.X);

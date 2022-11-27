@@ -163,7 +163,7 @@ namespace Framework.Tools.Pathfinding
 
         public bool IsWithinBounds(int x, int y)
         {
-            return 0 <= x && x < width && 0 <= y && y < height;
+            return -1 < x && x < width && -1 < y && y < height;
         }
 
         public bool IsWithinBounds(Vector2Int coordinate)

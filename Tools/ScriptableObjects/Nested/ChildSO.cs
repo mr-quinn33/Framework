@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-#if ADDRESSABLES
+#if UNITY_ADDRESSABLES
 using UnityEngine.AddressableAssets;
 #endif
 #if ODIN_INSPECTOR
@@ -16,7 +16,7 @@ namespace Framework.Tools.ScriptableObjects.Nested
 {
     public interface IChildSO
     {
-#if ADDRESSABLES
+#if UNITY_ADDRESSABLES
         IEnumerator MakeSureParentAsync();
 #endif
     }
@@ -42,7 +42,7 @@ namespace Framework.Tools.ScriptableObjects.Nested
             get
             {
                 if (parentSO != null) return parentSO;
-#if ADDRESSABLES
+#if UNITY_ADDRESSABLES
                 parentSO = Addressables.LoadAssetAsync<IParentSO<ChildSO>>(parentAssetAddress).WaitForCompletion();
 #endif
                 return parentSO;
@@ -55,7 +55,7 @@ namespace Framework.Tools.ScriptableObjects.Nested
             this.parentAssetAddress = parentAssetAddress;
         }
 
-#if ADDRESSABLES
+#if UNITY_ADDRESSABLES
         public IEnumerator MakeSureParentAsync()
         {
             if (parentSO != null) yield break;

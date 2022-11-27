@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-#if ADDRESSABLES
+#if UNITY_ADDRESSABLES
 using UnityEngine.AddressableAssets;
 #endif
 #if ODIN_INSPECTOR
@@ -16,7 +16,7 @@ namespace Framework.Tools.ScriptableObjects.Nested
 {
     public interface IParentSO
     {
-#if ADDRESSABLES
+#if UNITY_ADDRESSABLES
         IEnumerator MaskSureChildrenAsync(Addressables.MergeMode mergeMode = Addressables.MergeMode.Union);
 #endif
     }
@@ -57,7 +57,7 @@ namespace Framework.Tools.ScriptableObjects.Nested
         }
 #endif
 
-#if ADDRESSABLES
+#if UNITY_ADDRESSABLES
         public IEnumerator MaskSureChildrenAsync(Addressables.MergeMode mergeMode = Addressables.MergeMode.Union)
         {
             if (childAssetAddressList.Count == 0 || IsChildrenValid) yield break;
@@ -80,7 +80,7 @@ namespace Framework.Tools.ScriptableObjects.Nested
 
         private void MaskSureChildrenEditor()
         {
-#if UNITY_EDITOR && ADDRESSABLES
+#if UNITY_EDITOR && UNITY_ADDRESSABLES
             if (childAssetAddressList == null || childAssetAddressList.Count == 0 || IsChildrenValid) return;
             Children.Clear();
             foreach (var handle in childAssetAddressList.Select(Addressables.LoadAssetAsync<T>))

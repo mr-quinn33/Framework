@@ -1,0 +1,34 @@
+{
+    "name": "Framework.Tools.Pathfinding.DOTS",
+    "rootNamespace": "",
+    "references": [
+        "Unity.Mathematics",
+        "Unity.Collections",
+        "Unity.Burst"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.collections",
+            "expression": "1.2.4",
+            "define": "UNITY_COLLECTIONS"
+        },
+        {
+            "name": "com.unity.mathematics",
+            "expression": "1.2.1",
+            "define": "UNITY_MATHEMATICS"
+        },
+        {
+            "name": "com.unity.burst",
+            "expression": "1.6.6",
+            "define": "UNITY_BURST"
+        }
+    ],
+    "noEngineReferences": false
+}
