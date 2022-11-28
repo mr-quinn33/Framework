@@ -7,15 +7,13 @@ namespace Framework.Tools.Pathfinding
 {
     public interface IPathfinder
     {
-        IReadOnlyList<IPathNode> FindPathNodes(int startX, int startY, int endX, int endY, bool includeDiagonals);
-
-        IReadOnlyList<IPathNode> FindPathNodes(Vector2Int start, Vector2Int end, bool includeDiagonals);
-
         IReadOnlyList<Vector2Int> FindPath(int startX, int startY, int endX, int endY, bool includeDiagonals);
 
         IReadOnlyList<Vector2Int> FindPath(Vector2Int start, Vector2Int end, bool includeDiagonals);
 
         void SetIsWalkable(int x, int y, bool isWalkable);
+
+        void SetIsWalkable(Vector2Int coordinate, bool isWalkable);
     }
 
     public class Pathfinder : IPathfinder
@@ -24,18 +22,55 @@ namespace Framework.Tools.Pathfinding
         private readonly IList<IPathNode> openNodes;
         private readonly HashSet<IPathNode> closedNodes;
 
-        public Pathfinder(int width, int height)
+        public Pathfinder(IGrid2D<IPathNode> grid, IList<IPathNode> openNodes, HashSet<IPathNode> closedNodes)
         {
-            grid = new Grid2D<IPathNode>(width, height, (x, y) => new PathNode(x, y));
-            openNodes = new List<IPathNode>();
-            closedNodes = new HashSet<IPathNode>();
+            this.grid = grid;
+            this.openNodes = openNodes;
+            this.closedNodes = closedNodes;
+        }
+
+        public Pathfinder(int width, int height) : this(new Grid2D<IPathNode>(width, height, (x, y) => new PathNode(x, y)), new List<IPathNode>(), new HashSet<IPathNode>())
+        {
         }
 
         public Pathfinder(Vector2Int size) : this(size.x, size.y)
         {
         }
 
-        public IReadOnlyList<IPathNode> FindPathNodes(int startX, int startY, int endX, int endY, bool includeDiagonals)
+        public IReadOnlyList<Vector2Int> FindPath(int startX, int startY, int endX, int endY, bool includeDiagonals)
+        {
+            var pathNodes = FindPathNodes(startX, startY, endX, endY, includeDiagonals);
+            return pathNodes.Count == 0 ? Array.Empty<Vector2Int>() : pathNodes.Select(node => node.Coordinate).ToArray();
+        }
+
+        public IReadOnlyList<Vector2Int> FindPath(Vector2Int start, Vector2Int end, bool includeDiagonals)
+        {
+            return FindPath(start.x, start.y, end.x, end.y, includeDiagonals);
+        }
+
+        public void SetIsWalkable(int x, int y, bool isWalkable)
+        {
+            grid[x, y].SetIsWalkable(isWalkable);
+        }
+
+        public void SetIsWalkable(Vector2Int coordinate, bool isWalkable)
+        {
+            SetIsWalkable(coordinate.x, coordinate.y, isWalkable);
+        }
+
+        private void InitializeGrid(Vector2Int size)
+        {
+            for (var x = 0; x < size.x; x++)
+            for (var y = 0; y < size.y; y++)
+            {
+                var node = grid[x, y];
+                node.GCost = float.PositiveInfinity;
+                node.HCost = float.PositiveInfinity;
+                node.Parent = null;
+            }
+        }
+
+        private IReadOnlyList<IPathNode> FindPathNodes(int startX, int startY, int endX, int endY, bool includeDiagonals)
         {
             if (!grid.IsWithinBounds(startX, startY) || !grid.IsWithinBounds(endX, endY)) return Array.Empty<IPathNode>();
             InitializeGrid(grid.Size);
@@ -68,39 +103,6 @@ namespace Framework.Tools.Pathfinding
             }
 
             return Array.Empty<IPathNode>();
-        }
-
-        public IReadOnlyList<IPathNode> FindPathNodes(Vector2Int start, Vector2Int end, bool includeDiagonals)
-        {
-            return FindPathNodes(start.x, start.y, end.x, end.y, includeDiagonals);
-        }
-
-        public IReadOnlyList<Vector2Int> FindPath(int startX, int startY, int endX, int endY, bool includeDiagonals)
-        {
-            var pathNodes = FindPathNodes(startX, startY, endX, endY, includeDiagonals);
-            return pathNodes.Count == 0 ? Array.Empty<Vector2Int>() : pathNodes.Select(node => node.Coordinate).ToArray();
-        }
-
-        public IReadOnlyList<Vector2Int> FindPath(Vector2Int start, Vector2Int end, bool includeDiagonals)
-        {
-            return FindPath(start.x, start.y, end.x, end.y, includeDiagonals);
-        }
-
-        public void SetIsWalkable(int x, int y, bool isWalkable)
-        {
-            grid[x, y].SetIsWalkable(isWalkable);
-        }
-
-        private void InitializeGrid(Vector2Int size)
-        {
-            for (var x = 0; x < size.x; x++)
-            for (var y = 0; y < size.y; y++)
-            {
-                var node = grid[x, y];
-                node.GCost = float.PositiveInfinity;
-                node.HCost = float.PositiveInfinity;
-                node.Parent = null;
-            }
         }
 
         private static class PathfinderStaticMethods
