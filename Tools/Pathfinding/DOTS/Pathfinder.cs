@@ -48,21 +48,21 @@ namespace Framework.Tools.Pathfinding.DOTS
             PathfinderStaticMethods.InitializeNodes(ref pathNodes, size);
             ReadOnlySpan<int2> neighborOffsetArrayExcludeDiagonals = stackalloc int2[]
             {
+                new int2(1, 0),
                 new int2(0, 1),
-                new int2(0, -1),
                 new int2(-1, 0),
-                new int2(1, 0)
+                new int2(0, -1)
             };
             ReadOnlySpan<int2> neighborOffsetArrayIncludeDiagonals = stackalloc int2[]
             {
-                new int2(0, 1),
-                new int2(0, -1),
-                new int2(-1, 0),
-                new int2(1, 0),
                 new int2(1, 1),
                 new int2(-1, 1),
                 new int2(-1, -1),
-                new int2(1, -1)
+                new int2(1, -1),
+                new int2(1, 0),
+                new int2(0, 1),
+                new int2(-1, 0),
+                new int2(0, -1)
             };
             var openList = new NativeList<int>(Allocator.Temp);
             var closedList = new NativeList<int>(Allocator.Temp);
