@@ -1,35 +1,35 @@
 {
-    "name": "Framework.Tools.Pathfinding.DOTS",
-    "rootNamespace": "",
-    "references": [
-        "Unity.Mathematics",
-        "Unity.Collections",
-        "Unity.Burst",
-        "Framework"
-    ],
-    "includePlatforms": [],
-    "excludePlatforms": [],
-    "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
-    "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [
-        {
-            "name": "com.unity.collections",
-            "expression": "1.2.4",
-            "define": "UNITY_COLLECTIONS"
-        },
-        {
-            "name": "com.unity.mathematics",
-            "expression": "1.2.1",
-            "define": "UNITY_MATHEMATICS"
-        },
-        {
-            "name": "com.unity.burst",
-            "expression": "1.6.6",
-            "define": "UNITY_BURST"
-        }
-    ],
-    "noEngineReferences": false
+  "name": "Framework.Tools.Pathfinding.DOTS",
+  "rootNamespace": "",
+  "references": [
+    "GUID:d8b63aba1907145bea998dd612889d6b",
+    "GUID:e0cd26848372d4e5c891c569017e11f1",
+    "GUID:2665a8d13d1b3f18800f46e256720795",
+    "GUID:f7b2747675089d7409f51d50a96a23b6"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [
+    {
+      "name": "com.unity.collections",
+      "expression": "1.2.4",
+      "define": "UNITY_COLLECTIONS"
+    },
+    {
+      "name": "com.unity.mathematics",
+      "expression": "1.2.1",
+      "define": "UNITY_MATHEMATICS"
+    },
+    {
+      "name": "com.unity.burst",
+      "expression": "1.6.6",
+      "define": "UNITY_BURST"
+    }
+  ],
+  "noEngineReferences": false
 }

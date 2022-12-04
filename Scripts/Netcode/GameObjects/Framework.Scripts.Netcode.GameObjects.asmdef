@@ -1,8 +1,8 @@
 {
-  "name": "Framework",
+  "name": "Framework.Scripts.Netcode.GameObjects",
   "rootNamespace": "",
   "references": [
-    "GUID:2fbe2a777a0e90d4396e84d9b7fa6cb5"
+    "GUID:1491147abca9d7d4bb7105af628b223e"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],
@@ -11,6 +11,12 @@
   "precompiledReferences": [],
   "autoReferenced": true,
   "defineConstraints": [],
-  "versionDefines": [],
+  "versionDefines": [
+    {
+      "name": "com.unity.netcode.gameobjects",
+      "expression": "1.1.0",
+      "define": "UNITY_NETCODE_GAMEOBJECTS"
+    }
+  ],
   "noEngineReferences": false
 }

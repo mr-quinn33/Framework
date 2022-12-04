@@ -1,10 +1,12 @@
 ﻿#if ODIN_INSPECTOR
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
+#endif
 using UnityEngine;
 
 namespace Framework.Tools.ScriptableObjects.Nested.Serialized
 {
+#if ODIN_INSPECTOR
     [ShowOdinSerializedPropertiesInInspector]
     public abstract class SerializedChildSO : ChildSO, ISerializationCallbackReceiver
     {
@@ -20,5 +22,5 @@ namespace Framework.Tools.ScriptableObjects.Nested.Serialized
             UnitySerializationUtility.SerializeUnityObject(this, ref serializationData);
         }
     }
-}
 #endif
+}
