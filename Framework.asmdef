@@ -2,7 +2,7 @@
   "name": "Framework",
   "rootNamespace": "",
   "references": [
-    "GUID:2fbe2a777a0e90d4396e84d9b7fa6cb5"
+    "IOC"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],
