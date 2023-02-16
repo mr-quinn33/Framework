@@ -2,33 +2,30 @@
 
 namespace Framework.Tools.Singletons
 {
-    public abstract class Singleton<T> : IDisposable where T : Singleton<T>, new()
+    public abstract class Singleton<T> where T : Singleton<T>
     {
-        private static T instance;
-
-        private static readonly object Lock = new();
+        private static volatile T instance;
+        private static readonly object instanceLock = new();
 
         public static T Instance
         {
             get
             {
-                lock (Lock)
+                var localInstance = instance;
+                if (localInstance == null)
                 {
-                    instance ??= new T();
+                    lock (instanceLock)
+                    {
+                        localInstance = instance;
+                        if (localInstance == null)
+                        {
+                            instance = localInstance = (T) Activator.CreateInstance(typeof(T), true);
+                        }
+                    }
                 }
 
-                return instance;
+                return localInstance;
             }
-        }
-
-        public void Dispose()
-        {
-            instance = null;
-        }
-
-        ~Singleton()
-        {
-            Dispose();
         }
     }
 }
