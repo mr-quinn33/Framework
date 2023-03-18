@@ -10,7 +10,7 @@ namespace Framework.Scripts.Components
     {
         IGameMode IGetGameMode.GetGameMode()
         {
-            return typeof(T).GetMethod("Load", BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Static)?.Invoke(null, null) as IGameMode;
+            return GameMode<T>.Load();
         }
     }
 }
