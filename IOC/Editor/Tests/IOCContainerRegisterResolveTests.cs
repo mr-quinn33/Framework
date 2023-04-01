@@ -2,7 +2,7 @@ using NUnit.Framework;
 
 namespace Framework.IOC.Editor.Tests
 {
-    public class IOCContainerRegisterResolveTests
+    public sealed class IOCContainerRegisterResolveTests
     {
         [Test]
         public void RegisterResolve_RegisterNewInstance_NotNullAndNotEqual()

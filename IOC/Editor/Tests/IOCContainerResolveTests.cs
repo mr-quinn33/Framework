@@ -2,7 +2,7 @@
 
 namespace Framework.IOC.Editor.Tests
 {
-    public class IOCContainerResolveTests
+    public sealed class IOCContainerResolveTests
     {
         [Test]
         public void Resolve_NoRegisterResolve_Null()

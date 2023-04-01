@@ -21,7 +21,7 @@ namespace Framework.Tools.Services.Timers
         void SetTimeOutCallback(Action timeOutCallback);
     }
 
-    public class Timer : ITimer
+    public sealed class Timer : ITimer
     {
         private Action timeOutCallback;
 

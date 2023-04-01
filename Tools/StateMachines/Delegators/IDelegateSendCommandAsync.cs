@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Framework.Commands;
 
-namespace Framework.Tools.Delegators
+namespace Framework.Tools.StateMachines.Delegators
 {
     public interface IDelegateSendCommandAsync
     {

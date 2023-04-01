@@ -1,4 +1,4 @@
-﻿using Framework.Tools.Delegators;
+﻿using Framework.Tools.StateMachines.Delegators;
 
 namespace Framework.Tools.StateMachines.States
 {

@@ -24,7 +24,7 @@ namespace Framework.Tools.Pathfinding
         void SetIsWalkable(bool isWalkable);
     }
 
-    public class PathNode : IPathNode
+    public sealed class PathNode : IPathNode
     {
         public PathNode(int x, int y, bool isWalkable = true)
         {
@@ -87,29 +87,5 @@ namespace Framework.Tools.Pathfinding
         {
             return $"({X}, {Y})";
         }
-    }
-
-    public class PathNodeNotFoundException : Exception
-    {
-        private readonly IPathNode pathNode;
-
-        public PathNodeNotFoundException(IPathNode pathNode)
-        {
-            this.pathNode = pathNode;
-        }
-
-        public override string Message => $"Node {pathNode} not found";
-    }
-
-    public class PathNodeAlreadyExistsException : Exception
-    {
-        private readonly IPathNode pathNode;
-
-        public PathNodeAlreadyExistsException(IPathNode pathNode)
-        {
-            this.pathNode = pathNode;
-        }
-
-        public override string Message => $"Node {pathNode} already exists";
     }
 }

@@ -29,7 +29,7 @@ namespace Framework.IOC
         void Clear();
     }
 
-    public class IOCContainer : IIOCContainer
+    public sealed class IOCContainer : IIOCContainer
     {
         private readonly IDictionary<Type, Type> registeredDependencies = new Dictionary<Type, Type>();
         private readonly IDictionary<Type, object> registeredInstances = new Dictionary<Type, object>();

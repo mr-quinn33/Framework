@@ -25,7 +25,7 @@ namespace Framework.EventSystems
         void Clear();
     }
 
-    internal class EventSystem : IEventSystem
+    internal sealed class EventSystem : IEventSystem
     {
         private readonly IDictionary<Type, IRegistration> registrations = new Dictionary<Type, IRegistration>();
 
@@ -91,7 +91,7 @@ namespace Framework.EventSystems
             registrations.Clear();
         }
 
-        private class ActionUnregisterHandler<T> : IUnregisterHandler
+        private sealed class ActionUnregisterHandler<T> : IUnregisterHandler
         {
             private Action<T> action;
             private IEventSystem eventSystem;
@@ -110,7 +110,7 @@ namespace Framework.EventSystems
             }
         }
 
-        private class FuncUnregisterHandler<T, TResult> : IUnregisterHandler
+        private sealed class FuncUnregisterHandler<T, TResult> : IUnregisterHandler
         {
             private IEventSystem eventSystem;
             private Func<T, TResult> func;

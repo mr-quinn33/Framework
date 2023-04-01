@@ -12,7 +12,7 @@ namespace Framework.ReactiveProperties
         void Unregister(Action<T> action);
     }
 
-    public class ReactiveProperty<T> : IReactiveProperty<T>
+    public sealed class ReactiveProperty<T> : IReactiveProperty<T>
     {
         private T value;
 
@@ -56,7 +56,7 @@ namespace Framework.ReactiveProperties
             return reactiveProperty.value;
         }
 
-        private class ReactivePropertyUnregisterHandler<TValue> : IUnregisterHandler
+        private sealed class ReactivePropertyUnregisterHandler<TValue> : IUnregisterHandler
         {
             private Action<TValue> action;
             private IReactiveProperty<TValue> reactiveProperty;

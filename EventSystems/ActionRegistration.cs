@@ -7,7 +7,7 @@ namespace Framework.EventSystems
         Action<T> Action { get; set; }
     }
 
-    internal class ActionRegistration<T> : IActionRegistration<T>
+    internal sealed class ActionRegistration<T> : IActionRegistration<T>
     {
         public Action<T> Action { get; set; }
     }

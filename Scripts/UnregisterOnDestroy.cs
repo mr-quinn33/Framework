@@ -12,7 +12,7 @@ namespace Framework.Scripts
         void Add(IUnregisterHandlerCollection unregisterHandlerCollection);
     }
 
-    public class UnregisterOnDestroy : MonoBehaviour, IUnregisterOnDestroy
+    public sealed class UnregisterOnDestroy : MonoBehaviour, IUnregisterOnDestroy
     {
         private readonly ICollection<IUnregisterHandler> unregisterHandlers = new HashSet<IUnregisterHandler>();
 

@@ -7,7 +7,7 @@ namespace Framework.EventSystems
         Func<T, TResult> Func { get; set; }
     }
 
-    internal class FuncRegistration<T, TResult> : IFuncRegistration<T, TResult>
+    internal sealed class FuncRegistration<T, TResult> : IFuncRegistration<T, TResult>
     {
         public Func<T, TResult> Func { get; set; }
     }

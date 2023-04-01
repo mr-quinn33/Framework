@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace Framework.IOC.Editor.Tests
 {
-    public class IOCContainerRegisterInjectTests
+    public sealed class IOCContainerRegisterInjectTests
     {
         [Test]
         public void RegisterInject_RegisterNewInstance_NotNullAndEqual()

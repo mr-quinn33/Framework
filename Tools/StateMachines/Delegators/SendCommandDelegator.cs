@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Framework.Commands;
 using Framework.Interfaces;
 
-namespace Framework.Tools.Delegators
+namespace Framework.Tools.StateMachines.Delegators
 {
     public interface ISendCommandDelegator : IDelegateSendCommand, IDelegateSendCommandAsync
     {
@@ -16,7 +16,7 @@ namespace Framework.Tools.Delegators
         void UnregisterOnSendCommandAsync(Func<ICommandAsync, Task> func);
     }
 
-    public class SendCommandDelegator : ISendCommandDelegator
+    public abstract class SendCommandDelegator : ISendCommandDelegator
     {
         IUnregisterHandler ISendCommandDelegator.RegisterOnSendCommand(Action<ICommand> action)
         {
@@ -66,7 +66,7 @@ namespace Framework.Tools.Delegators
 
         private event Func<ICommandAsync, Task> OnSendCommandAsync;
 
-        private class SendCommandUnregisterHandler : IUnregisterHandler
+        private sealed class SendCommandUnregisterHandler : IUnregisterHandler
         {
             private Action<ICommand> action;
             private ISendCommandDelegator sendCommandDelegator;
@@ -85,7 +85,7 @@ namespace Framework.Tools.Delegators
             }
         }
 
-        private class SendCommandAsyncUnregisterHandler : IUnregisterHandler
+        private sealed class SendCommandAsyncUnregisterHandler : IUnregisterHandler
         {
             private Func<ICommandAsync, Task> func;
             private ISendCommandDelegator sendCommandDelegator;

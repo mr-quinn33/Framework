@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Framework.Tools.Pathfinding.Editor.Tests
 {
-    public class PathfinderFindPathTests
+    public sealed class PathfinderFindPathTests
     {
         [TestCaseSource(typeof(FindPathWhenStartOrEndAreOutOfBoundsReturnsEmptyPathTestCaseSource))]
         public void FindPath_WhenStartOrEndAreOutOfBounds_ReturnsEmptyPath(IPathfinder pathfinder, Vector2Int start, Vector2Int end)

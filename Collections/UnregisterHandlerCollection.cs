@@ -8,12 +8,12 @@ namespace Framework.Collections
         ICollection<IUnregisterHandler> UnregisterHandlers { get; }
     }
 
-    public class UnregisterHandlerList : IUnregisterHandlerCollection
+    public sealed class UnregisterHandlerList : IUnregisterHandlerCollection
     {
         ICollection<IUnregisterHandler> IUnregisterHandlerCollection.UnregisterHandlers { get; } = new List<IUnregisterHandler>();
     }
 
-    public class UnregisterHandlerHashSet : IUnregisterHandlerCollection
+    public sealed class UnregisterHandlerHashSet : IUnregisterHandlerCollection
     {
         ICollection<IUnregisterHandler> IUnregisterHandlerCollection.UnregisterHandlers { get; } = new HashSet<IUnregisterHandler>();
     }

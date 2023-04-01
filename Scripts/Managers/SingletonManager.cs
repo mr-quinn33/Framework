@@ -6,6 +6,7 @@ namespace Framework.Scripts.Managers
 {
     public abstract class SingletonManager<T1> : MonoBehaviour
     {
+        private const string Instance = nameof(Instance);
         protected T1 t1;
 
         protected virtual void Awake()
@@ -15,7 +16,7 @@ namespace Framework.Scripts.Managers
 
         protected bool TryGetInstance(Type type, out object instance)
         {
-            var propertyInfo = type.GetProperty("Instance", BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Static);
+            var propertyInfo = type.GetProperty(Instance, BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Static);
             if (propertyInfo != null)
             {
                 instance = propertyInfo.GetValue(null);

@@ -2,7 +2,7 @@
 
 namespace Framework.IOC.Editor.Tests
 {
-    public class IOCContainerRegisterTests
+    public sealed class IOCContainerRegisterTests
     {
         [Test]
         public void Register_RegisterSameType_True()

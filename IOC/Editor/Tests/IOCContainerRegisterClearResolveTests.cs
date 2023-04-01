@@ -2,7 +2,7 @@
 
 namespace Framework.IOC.Editor.Tests
 {
-    public class IOCContainerRegisterClearResolveTests
+    public sealed class IOCContainerRegisterClearResolveTests
     {
         [Test]
         public void RegisterClearResolve_RegisterNewInstance_Null()

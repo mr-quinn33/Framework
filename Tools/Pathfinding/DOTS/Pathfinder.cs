@@ -21,7 +21,7 @@ namespace Framework.Tools.Pathfinding.DOTS
 #endif
     }
 
-    public class Pathfinder : IPathfinder
+    public sealed class Pathfinder : IPathfinder
     {
         private readonly PathNode[] pathNodeArray;
         private readonly int width;

@@ -43,7 +43,7 @@ namespace Framework.Tools.Pathfinding
         void Clear();
     }
 
-    public class Grid2D<T> : IGrid2D<T>
+    public sealed class Grid2D<T> : IGrid2D<T>
     {
         private readonly T[,] array;
         private readonly int height;
@@ -173,7 +173,7 @@ namespace Framework.Tools.Pathfinding
 
         private event Action<IReadOnlyGrid2D<T>, int, int, bool, int, int> OnValueChanged;
 
-        private class Grid2DOnValueChangedUnregisterHandler : IUnregisterHandler
+        private sealed class Grid2DOnValueChangedUnregisterHandler : IUnregisterHandler
         {
             private Action<IReadOnlyGrid2D<T>, int, int, bool, int, int> action;
             private Grid2D<T> grid2D;

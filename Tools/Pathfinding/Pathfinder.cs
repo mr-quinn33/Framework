@@ -16,7 +16,7 @@ namespace Framework.Tools.Pathfinding
         void SetIsWalkable(Vector2Int coordinate, bool isWalkable);
     }
 
-    public class Pathfinder : IPathfinder
+    public sealed class Pathfinder : IPathfinder
     {
         private readonly IGrid2D<IPathNode> grid;
         private readonly IList<IPathNode> openNodes;
@@ -103,6 +103,30 @@ namespace Framework.Tools.Pathfinding
             }
 
             return Array.Empty<IPathNode>();
+        }
+
+        private sealed class PathNodeNotFoundException : Exception
+        {
+            private readonly IPathNode pathNode;
+
+            public PathNodeNotFoundException(IPathNode pathNode)
+            {
+                this.pathNode = pathNode;
+            }
+
+            public override string Message => $"Node {pathNode} not found";
+        }
+
+        private sealed class PathNodeAlreadyExistsException : Exception
+        {
+            private readonly IPathNode pathNode;
+
+            public PathNodeAlreadyExistsException(IPathNode pathNode)
+            {
+                this.pathNode = pathNode;
+            }
+
+            public override string Message => $"Node {pathNode} already exists";
         }
 
         private static class PathfinderStaticMethods
