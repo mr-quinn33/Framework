@@ -15,6 +15,8 @@ namespace Framework.ReactiveProperties
     public sealed class ReactiveProperty<T> : IReactiveProperty<T>
     {
         private T value;
+        
+        private event Action<T> OnValueChanged;
 
         public ReactiveProperty(T value = default)
         {
@@ -43,8 +45,6 @@ namespace Framework.ReactiveProperties
         {
             OnValueChanged -= action;
         }
-
-        private event Action<T> OnValueChanged;
 
         public override string ToString()
         {

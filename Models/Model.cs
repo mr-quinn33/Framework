@@ -12,20 +12,11 @@ namespace Framework.Models
     {
         private IGameMode gameMode;
 
-        IGameMode IGetGameMode.GetGameMode()
-        {
-            return gameMode;
-        }
+        IGameMode IGetGameMode.GetGameMode() => gameMode;
 
-        void ISetGameMode.SetGameMode(IGameMode gameMode)
-        {
-            this.gameMode = gameMode;
-        }
+        void ISetGameMode.SetGameMode(IGameMode gameMode) => this.gameMode = gameMode;
 
-        void IModel.Initialize()
-        {
-            Initialize();
-        }
+        void IModel.Initialize() => Initialize();
 
         protected abstract void Initialize();
     }

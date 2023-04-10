@@ -18,20 +18,11 @@ namespace Framework.Commands
     {
         private IGameMode gameMode;
 
-        IGameMode IGetGameMode.GetGameMode()
-        {
-            return gameMode;
-        }
+        IGameMode IGetGameMode.GetGameMode() => gameMode;
 
-        void ISetGameMode.SetGameMode(IGameMode gameMode)
-        {
-            this.gameMode = gameMode;
-        }
+        void ISetGameMode.SetGameMode(IGameMode gameMode) => this.gameMode = gameMode;
 
-        async Task ICommandAsync.ExecuteAsync()
-        {
-            await ExecuteAsync();
-        }
+        async Task ICommandAsync.ExecuteAsync() => await ExecuteAsync();
 
         protected abstract Task ExecuteAsync();
     }
@@ -40,15 +31,9 @@ namespace Framework.Commands
     {
         private IGameMode gameMode;
 
-        IGameMode IGetGameMode.GetGameMode()
-        {
-            return gameMode;
-        }
+        IGameMode IGetGameMode.GetGameMode() => gameMode;
 
-        void ISetGameMode.SetGameMode(IGameMode gameMode)
-        {
-            this.gameMode = gameMode;
-        }
+        void ISetGameMode.SetGameMode(IGameMode gameMode) => this.gameMode = gameMode;
 
         async Task<T> ICommandAsync<T>.ExecuteAsync()
         {

@@ -12,20 +12,11 @@ namespace Framework.Commands
     {
         private IGameMode gameMode;
 
-        IGameMode IGetGameMode.GetGameMode()
-        {
-            return gameMode;
-        }
+        IGameMode IGetGameMode.GetGameMode() => gameMode;
 
-        void ISetGameMode.SetGameMode(IGameMode gameMode)
-        {
-            this.gameMode = gameMode;
-        }
+        void ISetGameMode.SetGameMode(IGameMode gameMode) => this.gameMode = gameMode;
 
-        void ICommand.Execute()
-        {
-            Execute();
-        }
+        void ICommand.Execute() => Execute();
 
         protected abstract void Execute();
     }

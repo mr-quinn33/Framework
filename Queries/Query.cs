@@ -12,20 +12,11 @@ namespace Framework.Queries
     {
         private IGameMode gameMode;
 
-        IGameMode IGetGameMode.GetGameMode()
-        {
-            return gameMode;
-        }
+        IGameMode IGetGameMode.GetGameMode() => gameMode;
 
-        void ISetGameMode.SetGameMode(IGameMode gameMode)
-        {
-            this.gameMode = gameMode;
-        }
+        void ISetGameMode.SetGameMode(IGameMode gameMode) => this.gameMode = gameMode;
 
-        T IQuery<T>.Execute()
-        {
-            return Execute();
-        }
+        T IQuery<T>.Execute() => Execute();
 
         protected abstract T Execute();
     }

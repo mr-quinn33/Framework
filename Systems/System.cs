@@ -12,20 +12,11 @@ namespace Framework.Systems
     {
         private IGameMode gameMode;
 
-        IGameMode IGetGameMode.GetGameMode()
-        {
-            return gameMode;
-        }
+        IGameMode IGetGameMode.GetGameMode() => gameMode;
 
-        void ISetGameMode.SetGameMode(IGameMode gameMode)
-        {
-            this.gameMode = gameMode;
-        }
+        void ISetGameMode.SetGameMode(IGameMode gameMode) => this.gameMode = gameMode;
 
-        void ISystem.Initialize()
-        {
-            Initialize();
-        }
+        void ISystem.Initialize() => Initialize();
 
         protected abstract void Initialize();
     }

@@ -18,6 +18,9 @@ namespace Framework.Tools.StateMachines.Delegators
 
     public abstract class SendCommandDelegator : ISendCommandDelegator
     {
+        private event Action<ICommand> OnSendCommand;
+        private event Func<ICommandAsync, Task> OnSendCommandAsync;
+
         IUnregisterHandler ISendCommandDelegator.RegisterOnSendCommand(Action<ICommand> action)
         {
             OnSendCommand += action;
@@ -61,10 +64,6 @@ namespace Framework.Tools.StateMachines.Delegators
             if (OnSendCommandAsync == null) await Task.CompletedTask;
             else await OnSendCommandAsync.Invoke(new T());
         }
-
-        private event Action<ICommand> OnSendCommand;
-
-        private event Func<ICommandAsync, Task> OnSendCommandAsync;
 
         private sealed class SendCommandUnregisterHandler : IUnregisterHandler
         {

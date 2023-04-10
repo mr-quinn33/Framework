@@ -73,9 +73,9 @@ namespace Framework.IOC
 
         private object Resolve(Type type)
         {
-            if (registeredInstances.ContainsKey(type)) return registeredInstances[type];
+            if (registeredInstances.TryGetValue(type, out var resolve)) return resolve;
             if (registeredTypes.Contains(type)) return Activator.CreateInstance(type);
-            return registeredDependencies.ContainsKey(type) ? Activator.CreateInstance(registeredDependencies[type]) : null;
+            return registeredDependencies.TryGetValue(type, out var dependency) ? Activator.CreateInstance(dependency) : null;
         }
     }
 }

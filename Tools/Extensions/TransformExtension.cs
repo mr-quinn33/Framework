@@ -12,7 +12,7 @@ namespace Framework.Tools.Extensions
             while (queue.Count > 0)
             {
                 var transform = queue.Dequeue();
-                if (transform.name == name) return transform;
+                if (transform.name.Equals(name)) return transform;
                 foreach (Transform child in transform) queue.Enqueue(child);
             }
 

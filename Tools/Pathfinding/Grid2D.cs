@@ -49,6 +49,8 @@ namespace Framework.Tools.Pathfinding
         private readonly int height;
         private readonly int width;
 
+        private event Action<IReadOnlyGrid2D<T>, int, int, bool, int, int> OnValueChanged;
+
         public Grid2D(int width, int height)
         {
             this.width = width;
@@ -161,6 +163,7 @@ namespace Framework.Tools.Pathfinding
 
         public Vector2Int Size => new(width, height);
 
+
         public bool IsWithinBounds(int x, int y)
         {
             return -1 < x && x < width && -1 < y && y < height;
@@ -170,8 +173,6 @@ namespace Framework.Tools.Pathfinding
         {
             return IsWithinBounds(coordinate.x, coordinate.y);
         }
-
-        private event Action<IReadOnlyGrid2D<T>, int, int, bool, int, int> OnValueChanged;
 
         private sealed class Grid2DOnValueChangedUnregisterHandler : IUnregisterHandler
         {
