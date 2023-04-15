@@ -2,10 +2,11 @@ using NUnit.Framework;
 
 namespace Framework.IOC.Editor.Tests
 {
-    public sealed class IOCContainerRegisterResolveTests
+    [TestFixture]
+    public static class IOCContainerRegisterResolveTests
     {
         [Test]
-        public void RegisterResolve_RegisterNewInstance_NotNullAndNotEqual()
+        public static void RegisterResolve_RegisterNewInstance_NotNullAndNotEqual()
         {
             var iocContainer = new IOCContainer() as IIOCContainer;
             iocContainer.Register<IOCContainer>();
@@ -16,7 +17,7 @@ namespace Framework.IOC.Editor.Tests
         }
 
         [Test]
-        public void RegisterResolve_RegisterInstance_Equal()
+        public static void RegisterResolve_RegisterInstance_Equal()
         {
             var iocContainer = new IOCContainer() as IIOCContainer;
             iocContainer.Register<IOCContainer>(new IOCContainer());
@@ -27,7 +28,7 @@ namespace Framework.IOC.Editor.Tests
         }
 
         [Test]
-        public void RegisterResolve_RegisterDependency_Equal()
+        public static void RegisterResolve_RegisterDependency_Equal()
         {
             var iocContainer = new IOCContainer() as IIOCContainer;
             iocContainer.Register<IIOCContainer, IOCContainer>();
@@ -37,7 +38,7 @@ namespace Framework.IOC.Editor.Tests
         }
 
         [Test]
-        public void RegisterResolve_RegisterInstanceDependency_Equal()
+        public static void RegisterResolve_RegisterInstanceDependency_Equal()
         {
             var iocContainer = new IOCContainer() as IIOCContainer;
             iocContainer.Register<IIOCContainer>(iocContainer);

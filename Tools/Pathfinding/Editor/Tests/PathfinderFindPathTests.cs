@@ -4,10 +4,11 @@ using UnityEngine;
 
 namespace Framework.Tools.Pathfinding.Editor.Tests
 {
-    public sealed class PathfinderFindPathTests
+    [TestFixture]
+    public static class PathfinderFindPathTests
     {
         [TestCaseSource(typeof(FindPathWhenStartOrEndAreOutOfBoundsReturnsEmptyPathTestCaseSource))]
-        public void FindPath_WhenStartOrEndAreOutOfBounds_ReturnsEmptyPath(IPathfinder pathfinder, Vector2Int start, Vector2Int end)
+        public static void FindPath_WhenStartOrEndAreOutOfBounds_ReturnsEmptyPath(IPathfinder pathfinder, Vector2Int start, Vector2Int end)
         {
             var pathIncludeDiagonals = pathfinder.FindPath(start, end, true);
             var pathExcludeDiagonals = pathfinder.FindPath(start, end, false);
@@ -17,7 +18,7 @@ namespace Framework.Tools.Pathfinding.Editor.Tests
         }
 
         [TestCaseSource(typeof(FindPathWhenStartAndEndAreSameReturnsEmptyPathTestCaseSource))]
-        public void FindPath_WhenStartAndEndAreSame_ReturnsEmptyPath(IPathfinder pathfinder, Vector2Int start, Vector2Int end)
+        public static void FindPath_WhenStartAndEndAreSame_ReturnsEmptyPath(IPathfinder pathfinder, Vector2Int start, Vector2Int end)
         {
             var pathIncludeDiagonals = pathfinder.FindPath(start, end, true);
             var pathExcludeDiagonals = pathfinder.FindPath(start, end, false);
@@ -27,7 +28,7 @@ namespace Framework.Tools.Pathfinding.Editor.Tests
         }
 
         [TestCaseSource(typeof(FindPathNotDiagonalPathReturnsCorrectPathTestCaseSource))]
-        public void FindPath_NotDiagonalPath_ReturnsCorrectPath(IPathfinder pathfinder, Vector2Int start, Vector2Int end, Vector2Int[] expectedPath)
+        public static void FindPath_NotDiagonalPath_ReturnsCorrectPath(IPathfinder pathfinder, Vector2Int start, Vector2Int end, Vector2Int[] expectedPath)
         {
             var path = pathfinder.FindPath(start, end, false);
 
@@ -35,7 +36,7 @@ namespace Framework.Tools.Pathfinding.Editor.Tests
         }
 
         [TestCaseSource(typeof(FindPathDiagonalPathReturnsCorrectPathTestCaseSource))]
-        public void FindPath_DiagonalPath_ReturnsCorrectPath(IPathfinder pathfinder, Vector2Int start, Vector2Int end, Vector2Int[] expectedPath)
+        public static void FindPath_DiagonalPath_ReturnsCorrectPath(IPathfinder pathfinder, Vector2Int start, Vector2Int end, Vector2Int[] expectedPath)
         {
             var path = pathfinder.FindPath(start, end, true);
 

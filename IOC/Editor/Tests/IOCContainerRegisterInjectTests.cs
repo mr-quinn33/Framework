@@ -3,10 +3,11 @@ using NUnit.Framework;
 
 namespace Framework.IOC.Editor.Tests
 {
-    public sealed class IOCContainerRegisterInjectTests
+    [TestFixture]
+    public static class IOCContainerRegisterInjectTests
     {
         [Test]
-        public void RegisterInject_RegisterNewInstance_NotNullAndEqual()
+        public static void RegisterInject_RegisterNewInstance_NotNullAndEqual()
         {
             var iocContainer = new IOCContainer() as IIOCContainer;
             var testInstance = new MyTestClass();
@@ -18,7 +19,7 @@ namespace Framework.IOC.Editor.Tests
         }
 
         [Test]
-        public void RegisterInject_RegisterInstance_NotNullAndEqual()
+        public static void RegisterInject_RegisterInstance_NotNullAndEqual()
         {
             var iocContainer = new IOCContainer() as IIOCContainer;
             var testInstance = new MyTestClass();

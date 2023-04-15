@@ -2,10 +2,11 @@
 
 namespace Framework.IOC.Editor.Tests
 {
-    public sealed class IOCContainerRegisterTests
+    [TestFixture]
+    public static class IOCContainerRegisterTests
     {
         [Test]
-        public void Register_RegisterSameType_True()
+        public static void Register_RegisterSameType_True()
         {
             var iocContainer = new IOCContainer() as IIOCContainer;
             iocContainer.Register<IOCContainer>();
