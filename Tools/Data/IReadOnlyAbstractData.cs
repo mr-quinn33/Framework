@@ -7,7 +7,5 @@ namespace Framework.Tools.Data
         T Value { get; }
 
         T MaxValue { get; }
-
-        T DefaultValue { get; }
     }
 }

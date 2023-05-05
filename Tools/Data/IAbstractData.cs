@@ -9,11 +9,11 @@ namespace Framework.Tools.Data
 
         void DecreaseValue(T value);
 
-        void SetValue(T value);
-
         void IncreaseMaxValue(T value);
 
         void DecreaseMaxValue(T value);
+
+        void SetValue(T value);
 
         void SetMaxValue(T value);
 

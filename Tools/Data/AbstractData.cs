@@ -22,7 +22,7 @@ namespace Framework.Tools.Data
         public T Value
         {
             get => value;
-            private set
+            protected set
             {
                 var newValue = value;
                 if (newValue.CompareTo(default) < 0) newValue = default;
@@ -38,7 +38,7 @@ namespace Framework.Tools.Data
         public T MaxValue
         {
             get => maxValue;
-            private set
+            protected set
             {
                 var newMaxValue = value;
                 if (newMaxValue.CompareTo(default) < 0) newMaxValue = default;
@@ -49,31 +49,17 @@ namespace Framework.Tools.Data
             }
         }
 
-        public T DefaultValue => default;
+        public abstract void IncreaseValue(T value);
 
-        public void IncreaseValue(T value)
-        {
-            Value += (dynamic) value;
-        }
+        public abstract void DecreaseValue(T value);
 
-        public void DecreaseValue(T value)
-        {
-            Value -= (dynamic) value;
-        }
+        public abstract void IncreaseMaxValue(T value);
+
+        public abstract void DecreaseMaxValue(T value);
 
         public void SetValue(T value)
         {
             Value = value;
-        }
-
-        public void IncreaseMaxValue(T value)
-        {
-            MaxValue += (dynamic) value;
-        }
-
-        public void DecreaseMaxValue(T value)
-        {
-            MaxValue -= (dynamic) value;
         }
 
         public void SetMaxValue(T value)
@@ -83,25 +69,25 @@ namespace Framework.Tools.Data
 
         public IAbstractData<T> AddValue(T value)
         {
-            Value += (dynamic) value;
+            IncreaseValue(value);
             return this;
         }
 
         public IAbstractData<T> SubtractValue(T value)
         {
-            Value -= (dynamic) value;
+            DecreaseValue(value);
             return this;
         }
 
         public IAbstractData<T> AddMaxValue(T value)
         {
-            MaxValue += (dynamic) value;
+            IncreaseMaxValue(value);
             return this;
         }
 
         public IAbstractData<T> SubtractMaxValue(T value)
         {
-            MaxValue -= (dynamic) value;
+            DecreaseMaxValue(value);
             return this;
         }
 
