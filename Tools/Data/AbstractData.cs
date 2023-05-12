@@ -145,6 +145,11 @@ namespace Framework.Tools.Data
             OnValueEqualsDefaultValue -= action;
         }
 
+        public static implicit operator T(AbstractData<T> data)
+        {
+            return data.Value;
+        }
+
         private sealed class AbstractDataOnValueChangedUnregisterHandler : IUnregisterHandler
         {
             private AbstractData<T> data;
