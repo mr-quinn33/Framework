@@ -30,8 +30,8 @@ namespace Framework.Tools.Data
                 if (newValue.Equals(this.value)) return;
                 this.value = newValue;
                 OnValueChanged?.Invoke(this);
-                if (newValue.Equals(maxValue)) OnValueEqualsMaxValue?.Invoke(this);
-                if (newValue.Equals(default)) OnValueEqualsDefaultValue?.Invoke(this);
+                if (this.value.Equals(maxValue)) OnValueEqualsMaxValue?.Invoke(this);
+                if (this.value.Equals(default)) OnValueEqualsDefaultValue?.Invoke(this);
             }
         }
 
