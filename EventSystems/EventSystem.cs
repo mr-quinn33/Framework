@@ -67,7 +67,7 @@ namespace Framework.EventSystems
 
         void IEventSystem.Invoke<T>(T t)
         {
-            if (registrations.TryGetValue(typeof(T), out var value) && value is IActionRegistration<T> {Action: { }} registration) registration.Action.Invoke(t);
+            if (registrations.TryGetValue(typeof(T), out var value) && value is IActionRegistration<T> {Action: not null} registration) registration.Action.Invoke(t);
         }
 
         void IEventSystem.Invoke<T>()
@@ -77,7 +77,7 @@ namespace Framework.EventSystems
 
         TResult IEventSystem.Invoke<T, TResult>(T t)
         {
-            if (registrations.TryGetValue(typeof(T), out var value) && value is IFuncRegistration<T, TResult> {Func: { }} registration) return registration.Func.Invoke(t);
+            if (registrations.TryGetValue(typeof(T), out var value) && value is IFuncRegistration<T, TResult> {Func: not null} registration) return registration.Func.Invoke(t);
             return default;
         }
 
