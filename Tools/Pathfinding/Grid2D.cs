@@ -11,7 +11,7 @@ namespace Framework.Tools.Pathfinding
 
         T this[int x, int y] { get; }
 
-        T this[Vector2Int pos] { get; }
+        T this[Vector2Int coordinate] { get; }
 
         bool IsWithinBounds(int x, int y);
 
@@ -21,7 +21,7 @@ namespace Framework.Tools.Pathfinding
 
         bool Contains(T t, out int x, out int y);
 
-        bool Contains(T t, out Vector2Int position);
+        bool Contains(T t, out Vector2Int coordinate);
 
         IReadOnlyList<T> GetNeighbours(int x, int y, bool includeDiagonals);
 
@@ -131,10 +131,10 @@ namespace Framework.Tools.Pathfinding
             return false;
         }
 
-        public bool Contains(T t, out Vector2Int position)
+        public bool Contains(T t, out Vector2Int coordinate)
         {
             var result = Contains(t, out var x, out var y);
-            position = new Vector2Int(x, y);
+            coordinate = new Vector2Int(x, y);
             return result;
         }
 
