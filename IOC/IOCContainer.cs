@@ -7,17 +7,8 @@ namespace Framework.IOC
 {
     public interface IIOCContainer
     {
-        /// <summary>
-        ///     Register a new instance
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
         void Register<T>();
 
-        /// <summary>
-        ///     Register an instance
-        /// </summary>
-        /// <param name="instance"></param>
-        /// <typeparam name="T"></typeparam>
         void Register<T>(object instance);
 
         void Register<TParent, TChild>() where TChild : TParent;
@@ -57,7 +48,7 @@ namespace Framework.IOC
 
         void IIOCContainer.Inject<T>(object obj)
         {
-            foreach (var propertyInfo in obj.GetType().GetProperties().Where(p => p.GetCustomAttributes(typeof(InjectAttribute), true).Length > 0))
+            foreach (var propertyInfo in obj.GetType().GetProperties().Where(p => p.GetCustomAttributes(typeof(InjectPropertyAttribute), true).Length > 0))
             {
                 var value = Resolve(propertyInfo.PropertyType);
                 if (value != null) propertyInfo.SetValue(obj, value);

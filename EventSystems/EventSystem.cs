@@ -8,19 +8,11 @@ namespace Framework.EventSystems
     {
         IUnregisterHandler Register<T>(Action<T> action);
 
-        IUnregisterHandler Register<T, TResult>(Func<T, TResult> func);
-
         void Unregister<T>(Action<T> action);
-
-        void Unregister<T, TResult>(Func<T, TResult> func);
 
         void Invoke<T>(T t);
 
         void Invoke<T>() where T : new();
-
-        TResult Invoke<T, TResult>(T t);
-
-        TResult Invoke<T, TResult>() where T : new();
 
         void Clear();
     }
@@ -34,56 +26,27 @@ namespace Framework.EventSystems
             var type = typeof(T);
             if (!registrations.TryGetValue(type, out var value))
             {
-                value = new ActionRegistration<T>();
+                value = new Registration<T>();
                 registrations.Add(type, value);
             }
 
-            if (value is IActionRegistration<T> registration) registration.Action += action;
+            if (value is IRegistration<T> registration) registration.Action += action;
             return new ActionUnregisterHandler<T>(this, action);
-        }
-
-        IUnregisterHandler IEventSystem.Register<T, TResult>(Func<T, TResult> func)
-        {
-            var type = typeof(T);
-            if (!registrations.TryGetValue(type, out var value))
-            {
-                value = new FuncRegistration<T, TResult>();
-                registrations.Add(type, value);
-            }
-
-            if (value is IFuncRegistration<T, TResult> registration) registration.Func += func;
-            return new FuncUnregisterHandler<T, TResult>(this, func);
         }
 
         void IEventSystem.Unregister<T>(Action<T> action)
         {
-            if (registrations.TryGetValue(typeof(T), out var value) && value is IActionRegistration<T> registration) registration.Action -= action;
-        }
-
-        void IEventSystem.Unregister<T, TResult>(Func<T, TResult> func)
-        {
-            if (registrations.TryGetValue(typeof(T), out var value) && value is IFuncRegistration<T, TResult> registration) registration.Func -= func;
+            if (registrations.TryGetValue(typeof(T), out var value) && value is IRegistration<T> registration) registration.Action -= action;
         }
 
         void IEventSystem.Invoke<T>(T t)
         {
-            if (registrations.TryGetValue(typeof(T), out var value) && value is IActionRegistration<T> {Action: not null} registration) registration.Action.Invoke(t);
+            if (registrations.TryGetValue(typeof(T), out var value) && value is IRegistration<T> {Action: not null} registration) registration.Action.Invoke(t);
         }
 
         void IEventSystem.Invoke<T>()
         {
             ((IEventSystem) this).Invoke(new T());
-        }
-
-        TResult IEventSystem.Invoke<T, TResult>(T t)
-        {
-            if (registrations.TryGetValue(typeof(T), out var value) && value is IFuncRegistration<T, TResult> {Func: not null} registration) return registration.Func.Invoke(t);
-            return default;
-        }
-
-        TResult IEventSystem.Invoke<T, TResult>()
-        {
-            return ((IEventSystem) this).Invoke<T, TResult>(new T());
         }
 
         void IEventSystem.Clear()
@@ -107,25 +70,6 @@ namespace Framework.EventSystems
                 eventSystem.Unregister(action);
                 eventSystem = null;
                 action = null;
-            }
-        }
-
-        private sealed class FuncUnregisterHandler<T, TResult> : IUnregisterHandler
-        {
-            private IEventSystem eventSystem;
-            private Func<T, TResult> func;
-
-            public FuncUnregisterHandler(IEventSystem eventSystem, Func<T, TResult> func)
-            {
-                this.eventSystem = eventSystem;
-                this.func = func;
-            }
-
-            void IUnregisterHandler.Unregister()
-            {
-                eventSystem.Unregister(func);
-                eventSystem = null;
-                func = null;
             }
         }
     }

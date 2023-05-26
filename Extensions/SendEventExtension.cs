@@ -13,15 +13,5 @@ namespace Framework.Extensions
         {
             self.GetGameMode().SendEvent<T>();
         }
-
-        public static TResult SendEvent<T, TResult>(this ISendEvent self, T t)
-        {
-            return self.GetGameMode().SendEvent<T, TResult>(t);
-        }
-
-        public static TResult SendEvent<T, TResult>(this ISendEvent self) where T : new()
-        {
-            return self.GetGameMode().SendEvent<T, TResult>();
-        }
     }
 }

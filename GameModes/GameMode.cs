@@ -47,19 +47,11 @@ namespace Framework.GameModes
 
         IUnregisterHandler RegisterEvent<T>(Action<T> action);
 
-        IUnregisterHandler RegisterEvent<T, TResult>(Func<T, TResult> func);
-
         void UnregisterEvent<T>(Action<T> action);
-
-        void UnregisterEvent<T, TResult>(Func<T, TResult> func);
 
         void SendEvent<T>(T t);
 
         void SendEvent<T>() where T : new();
-
-        TResult SendEvent<T, TResult>(T t);
-
-        TResult SendEvent<T, TResult>() where T : new();
 
         void RegisterDependency<TDependency>(object dependency);
 
@@ -198,19 +190,9 @@ namespace Framework.GameModes
             return eventSystem.Register(action);
         }
 
-        IUnregisterHandler IGameMode.RegisterEvent<TEvent, TResult>(Func<TEvent, TResult> func)
-        {
-            return eventSystem.Register(func);
-        }
-
         void IGameMode.UnregisterEvent<TEvent>(Action<TEvent> action)
         {
             eventSystem.Unregister(action);
-        }
-
-        void IGameMode.UnregisterEvent<TEvent, TResult>(Func<TEvent, TResult> func)
-        {
-            eventSystem.Unregister(func);
         }
 
         void IGameMode.SendEvent<TEvent>(TEvent t)
@@ -221,16 +203,6 @@ namespace Framework.GameModes
         void IGameMode.SendEvent<TEvent>()
         {
             eventSystem.Invoke<TEvent>();
-        }
-
-        TResult IGameMode.SendEvent<TEvent, TResult>(TEvent t)
-        {
-            return eventSystem.Invoke<TEvent, TResult>(t);
-        }
-
-        TResult IGameMode.SendEvent<TEvent, TResult>()
-        {
-            return eventSystem.Invoke<TEvent, TResult>();
         }
 
         void IGameMode.RegisterDependency<TDependency>(object dependency)

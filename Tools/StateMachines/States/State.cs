@@ -1,18 +1,13 @@
-﻿using Framework.GameModes;
-using Framework.Rules;
-
-namespace Framework.Tools.StateMachines.States
+﻿namespace Framework.Tools.StateMachines.States
 {
-    public abstract class State<T> : IState, ISendCommand, ISendCommandAsync where T : GameMode<T>, new()
+    public interface IState
     {
-        public abstract void OnEnter();
+        void OnEnter(IStateMachine stateMachine);
 
-        public abstract void Update();
+        void Update(IStateMachine stateMachine);
 
-        public abstract void FixedUpdate();
+        void FixedUpdate(IStateMachine stateMachine);
 
-        public abstract void OnExit();
-
-        IGameMode IGetGameMode.GetGameMode() => GameMode<T>.Load();
+        void OnExit(IStateMachine stateMachine);
     }
 }

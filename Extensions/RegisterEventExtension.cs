@@ -10,10 +10,5 @@ namespace Framework.Extensions
         {
             return self.GetGameMode().RegisterEvent(action);
         }
-
-        public static IUnregisterHandler RegisterEvent<T, TResult>(this IRegisterEvent self, Func<T, TResult> func)
-        {
-            return self.GetGameMode().RegisterEvent(func);
-        }
     }
 }
