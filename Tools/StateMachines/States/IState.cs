@@ -4,9 +4,9 @@
     {
         void OnEnter(IStateMachine stateMachine);
 
-        void Update(IStateMachine stateMachine);
+        void Update(IStateMachine stateMachine, float deltaTime);
 
-        void FixedUpdate(IStateMachine stateMachine);
+        void FixedUpdate(IStateMachine stateMachine, float fixedDeltaTime);
 
         void OnExit(IStateMachine stateMachine);
     }
