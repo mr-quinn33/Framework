@@ -10,12 +10,12 @@ namespace Framework.Scripts.Managers
 
         protected virtual void Awake()
         {
-            if (TryGetInstance(typeof(T1), out var instance)) t1 = (T1) instance;
+            if (TryGetInstance(typeof(T1), out object instance)) t1 = (T1) instance;
         }
 
         protected bool TryGetInstance(Type type, out object instance)
         {
-            var propertyInfo = type.GetProperty("Instance", BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Static);
+            PropertyInfo propertyInfo = type.GetProperty("Instance", BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Static);
             if (propertyInfo != null)
             {
                 instance = propertyInfo.GetValue(null);
@@ -34,7 +34,7 @@ namespace Framework.Scripts.Managers
         protected override void Awake()
         {
             base.Awake();
-            if (TryGetInstance(typeof(T2), out var instance)) t2 = (T2) instance;
+            if (TryGetInstance(typeof(T2), out object instance)) t2 = (T2) instance;
         }
     }
 
@@ -45,7 +45,7 @@ namespace Framework.Scripts.Managers
         protected override void Awake()
         {
             base.Awake();
-            if (TryGetInstance(typeof(T3), out var instance)) t3 = (T3) instance;
+            if (TryGetInstance(typeof(T3), out object instance)) t3 = (T3) instance;
         }
     }
 
@@ -56,7 +56,7 @@ namespace Framework.Scripts.Managers
         protected override void Awake()
         {
             base.Awake();
-            if (TryGetInstance(typeof(T4), out var instance)) t4 = (T4) instance;
+            if (TryGetInstance(typeof(T4), out object instance)) t4 = (T4) instance;
         }
     }
 
@@ -67,7 +67,7 @@ namespace Framework.Scripts.Managers
         protected override void Awake()
         {
             base.Awake();
-            if (TryGetInstance(typeof(T5), out var instance)) t5 = (T5) instance;
+            if (TryGetInstance(typeof(T5), out object instance)) t5 = (T5) instance;
         }
     }
 
@@ -78,7 +78,7 @@ namespace Framework.Scripts.Managers
         protected override void Awake()
         {
             base.Awake();
-            if (TryGetInstance(typeof(T6), out var instance)) t6 = (T6) instance;
+            if (TryGetInstance(typeof(T6), out object instance)) t6 = (T6) instance;
         }
     }
 
@@ -89,7 +89,7 @@ namespace Framework.Scripts.Managers
         protected override void Awake()
         {
             base.Awake();
-            if (TryGetInstance(typeof(T7), out var instance)) t7 = (T7) instance;
+            if (TryGetInstance(typeof(T7), out object instance)) t7 = (T7) instance;
         }
     }
 
@@ -100,7 +100,7 @@ namespace Framework.Scripts.Managers
         protected override void Awake()
         {
             base.Awake();
-            if (TryGetInstance(typeof(T8), out var instance)) t8 = (T8) instance;
+            if (TryGetInstance(typeof(T8), out object instance)) t8 = (T8) instance;
         }
     }
 
@@ -111,7 +111,7 @@ namespace Framework.Scripts.Managers
         protected override void Awake()
         {
             base.Awake();
-            if (TryGetInstance(typeof(T9), out var instance)) t9 = (T9) instance;
+            if (TryGetInstance(typeof(T9), out object instance)) t9 = (T9) instance;
         }
     }
 
@@ -122,7 +122,7 @@ namespace Framework.Scripts.Managers
         protected override void Awake()
         {
             base.Awake();
-            if (TryGetInstance(typeof(T10), out var instance)) t10 = (T10) instance;
+            if (TryGetInstance(typeof(T10), out object instance)) t10 = (T10) instance;
         }
     }
 
@@ -133,7 +133,7 @@ namespace Framework.Scripts.Managers
         protected override void Awake()
         {
             base.Awake();
-            if (TryGetInstance(typeof(T11), out var instance)) t11 = (T11) instance;
+            if (TryGetInstance(typeof(T11), out object instance)) t11 = (T11) instance;
         }
     }
 
@@ -144,7 +144,7 @@ namespace Framework.Scripts.Managers
         protected override void Awake()
         {
             base.Awake();
-            if (TryGetInstance(typeof(T12), out var instance)) t12 = (T12) instance;
+            if (TryGetInstance(typeof(T12), out object instance)) t12 = (T12) instance;
         }
     }
 
@@ -155,7 +155,7 @@ namespace Framework.Scripts.Managers
         protected override void Awake()
         {
             base.Awake();
-            if (TryGetInstance(typeof(T13), out var instance)) t13 = (T13) instance;
+            if (TryGetInstance(typeof(T13), out object instance)) t13 = (T13) instance;
         }
     }
 
@@ -166,7 +166,7 @@ namespace Framework.Scripts.Managers
         protected override void Awake()
         {
             base.Awake();
-            if (TryGetInstance(typeof(T14), out var instance)) t14 = (T14) instance;
+            if (TryGetInstance(typeof(T14), out object instance)) t14 = (T14) instance;
         }
     }
 
@@ -177,7 +177,7 @@ namespace Framework.Scripts.Managers
         protected override void Awake()
         {
             base.Awake();
-            if (TryGetInstance(typeof(T15), out var instance)) t15 = (T15) instance;
+            if (TryGetInstance(typeof(T15), out object instance)) t15 = (T15) instance;
         }
     }
 
@@ -188,7 +188,7 @@ namespace Framework.Scripts.Managers
         protected override void Awake()
         {
             base.Awake();
-            if (TryGetInstance(typeof(T16), out var instance)) t16 = (T16) instance;
+            if (TryGetInstance(typeof(T16), out object instance)) t16 = (T16) instance;
         }
     }
 }

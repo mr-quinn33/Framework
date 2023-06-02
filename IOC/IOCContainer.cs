@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Framework.IOC.Attributes;
 
 namespace Framework.IOC
@@ -48,9 +49,9 @@ namespace Framework.IOC
 
         void IIOCContainer.Inject<T>(object obj)
         {
-            foreach (var propertyInfo in obj.GetType().GetProperties().Where(p => p.GetCustomAttributes(typeof(InjectPropertyAttribute), true).Length > 0))
+            foreach (PropertyInfo propertyInfo in obj.GetType().GetProperties().Where(p => p.GetCustomAttributes(typeof(InjectPropertyAttribute), true).Length > 0))
             {
-                var value = Resolve(propertyInfo.PropertyType);
+                object value = Resolve(propertyInfo.PropertyType);
                 if (value != null) propertyInfo.SetValue(obj, value);
             }
         }
@@ -64,9 +65,9 @@ namespace Framework.IOC
 
         private object Resolve(Type type)
         {
-            if (registeredInstances.TryGetValue(type, out var resolve)) return resolve;
+            if (registeredInstances.TryGetValue(type, out object resolve)) return resolve;
             if (registeredTypes.Contains(type)) return Activator.CreateInstance(type);
-            return registeredDependencies.TryGetValue(type, out var dependency) ? Activator.CreateInstance(dependency) : null;
+            return registeredDependencies.TryGetValue(type, out Type dependency) ? Activator.CreateInstance(dependency) : null;
         }
     }
 }

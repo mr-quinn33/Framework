@@ -18,7 +18,7 @@ namespace Framework.Scripts
 
         private void OnDestroy()
         {
-            foreach (var unregisterHandler in unregisterHandlers) unregisterHandler.Unregister();
+            foreach (IUnregisterHandler unregisterHandler in unregisterHandlers) unregisterHandler.Unregister();
             unregisterHandlers.Clear();
         }
 
@@ -29,7 +29,7 @@ namespace Framework.Scripts
 
         public void Add(IUnregisterHandlerCollection unregisterHandlerCollection)
         {
-            foreach (var unregisterHandler in unregisterHandlerCollection.UnregisterHandlers) Add(unregisterHandler);
+            foreach (IUnregisterHandler unregisterHandler in unregisterHandlerCollection.UnregisterHandlers) Add(unregisterHandler);
         }
     }
 }

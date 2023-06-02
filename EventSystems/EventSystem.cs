@@ -23,7 +23,7 @@ namespace Framework.EventSystems
 
         IUnregisterHandler IEventSystem.Register<T>(Action<T> action)
         {
-            var type = typeof(T);
+            Type type = typeof(T);
             if (!registrations.TryGetValue(type, out var value))
             {
                 value = new Registration<T>();

@@ -1,4 +1,5 @@
 ﻿using Framework.Collections;
+using Framework.Interfaces;
 using Framework.Scripts;
 using UnityEngine;
 
@@ -14,7 +15,7 @@ namespace Framework.Extensions
 
         public static void UnregisterAll(this IUnregisterHandlerCollection self)
         {
-            foreach (var unregisterHandler in self.UnregisterHandlers) unregisterHandler.Unregister();
+            foreach (IUnregisterHandler unregisterHandler in self.UnregisterHandlers) unregisterHandler.Unregister();
             self.UnregisterHandlers.Clear();
         }
     }

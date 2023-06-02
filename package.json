@@ -1,0 +1,23 @@
+﻿{
+  "name": "come.rookiestudio.framework",
+  "version": "0.1.0",
+  "displayName": "Framework",
+  "description": "A Unity game framework",
+  "unity": "2018.3",
+  "dependencies": {
+  },
+  "author": {
+    "name": "Rookie Studio",
+    "email": "mrquinn3614@gmail.com",
+    "url": "https://github.com/mr-quinn33"
+  },
+  "changelogUrl": "https://github.com/mr-quinn33/Framework",
+  "documentationUrl": "https://github.com/mr-quinn33/Framework#framework",
+  "license": "MIT",
+  "licenseUrl": "https://github.com/mr-quinn33/Framework/blob/main/LICENSE",
+  "keywords": [
+    "unity",
+    "framework",
+    "plugin"
+  ]
+}

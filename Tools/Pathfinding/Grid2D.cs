@@ -77,7 +77,7 @@ namespace Framework.Tools.Pathfinding
                 if (!IsWithinBounds(x, y)) return;
                 if (value == null && array[x, y] == null) return;
                 if (value != null && value.Equals(array[x, y])) return;
-                var isGridContainsValue = Contains(value, out var oldX, out var oldY);
+                bool isGridContainsValue = Contains(value, out int oldX, out int oldY);
                 array[x, y] = value;
                 OnValueChanged?.Invoke(this, x, y, isGridContainsValue, oldX, oldY);
             }
@@ -91,7 +91,7 @@ namespace Framework.Tools.Pathfinding
 
         public bool Remove(T t)
         {
-            if (!Contains(t, out var x, out var y)) return false;
+            if (!Contains(t, out int x, out int y)) return false;
             array[x, y] = default;
             return true;
         }
@@ -133,7 +133,7 @@ namespace Framework.Tools.Pathfinding
 
         public bool Contains(T t, out Vector2Int position)
         {
-            var result = Contains(t, out var x, out var y);
+            bool result = Contains(t, out int x, out int y);
             position = new Vector2Int(x, y);
             return result;
         }
@@ -158,11 +158,10 @@ namespace Framework.Tools.Pathfinding
 
         public IReadOnlyList<T> GetNeighbours(T t, bool includeDiagonals)
         {
-            return Contains(t, out var x, out var y) ? GetNeighbours(x, y, includeDiagonals) : Array.Empty<T>();
+            return Contains(t, out int x, out int y) ? GetNeighbours(x, y, includeDiagonals) : Array.Empty<T>();
         }
 
         public Vector2Int Size => new(width, height);
-
 
         public bool IsWithinBounds(int x, int y)
         {
