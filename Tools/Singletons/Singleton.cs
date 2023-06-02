@@ -11,7 +11,7 @@ namespace Framework.Tools.Singletons
         {
             get
             {
-                var localInstance = instance;
+                T localInstance = instance;
                 if (localInstance == null)
                 {
                     lock (instanceLock)

@@ -63,7 +63,7 @@ namespace Framework.Tools.Pathfinding
             for (var x = 0; x < size.x; x++)
             for (var y = 0; y < size.y; y++)
             {
-                var node = grid[x, y];
+                IPathNode node = grid[x, y];
                 node.GCost = float.PositiveInfinity;
                 node.HCost = float.PositiveInfinity;
                 node.Parent = null;
@@ -74,8 +74,8 @@ namespace Framework.Tools.Pathfinding
         {
             if (!grid.IsWithinBounds(startX, startY) || !grid.IsWithinBounds(endX, endY)) return Array.Empty<IPathNode>();
             InitializeGrid(grid.Size);
-            var startNode = grid[startX, startY];
-            var endNode = grid[endX, endY];
+            IPathNode startNode = grid[startX, startY];
+            IPathNode endNode = grid[endX, endY];
             closedNodes.Clear();
             openNodes.Clear();
             openNodes.Add(startNode);
@@ -83,15 +83,15 @@ namespace Framework.Tools.Pathfinding
             startNode.HCost = PathfinderStaticMethods.CalculateDistance(startNode, endNode, includeDiagonals);
             while (openNodes.Count > 0)
             {
-                var currentNode = openNodes.Min();
+                IPathNode currentNode = openNodes.Min();
                 if (ReferenceEquals(currentNode, endNode)) return PathfinderStaticMethods.CalculatePath(currentNode);
                 if (!openNodes.Remove(currentNode)) throw new PathNodeNotFoundException(currentNode);
                 if (!closedNodes.Add(currentNode)) throw new PathNodeAlreadyExistsException(currentNode);
-                foreach (var neighbourNode in grid.GetNeighbours(currentNode, includeDiagonals))
+                foreach (IPathNode neighbourNode in grid.GetNeighbours(currentNode, includeDiagonals))
                 {
                     if (closedNodes.Contains(neighbourNode)) continue;
                     if (!neighbourNode.IsWalkable && closedNodes.Add(neighbourNode)) continue;
-                    var tentativeGCost = currentNode.GCost + PathfinderStaticMethods.CalculateDistance(currentNode, neighbourNode, includeDiagonals);
+                    float tentativeGCost = currentNode.GCost + PathfinderStaticMethods.CalculateDistance(currentNode, neighbourNode, includeDiagonals);
                     if (tentativeGCost < neighbourNode.GCost)
                     {
                         neighbourNode.Parent = currentNode;
@@ -135,17 +135,17 @@ namespace Framework.Tools.Pathfinding
 
             public static float CalculateDistance(IPathNode currentNode, IPathNode endNode, bool includeDiagonals)
             {
-                var xDistance = Mathf.Abs(currentNode.X - endNode.X);
-                var yDistance = Mathf.Abs(currentNode.Y - endNode.Y);
+                int xDistance = Mathf.Abs(currentNode.X - endNode.X);
+                int yDistance = Mathf.Abs(currentNode.Y - endNode.Y);
                 if (!includeDiagonals) return xDistance + yDistance;
-                var remaining = Mathf.Abs(xDistance - yDistance);
+                int remaining = Mathf.Abs(xDistance - yDistance);
                 return Sqrt2 * Mathf.Min(xDistance, yDistance) + remaining;
             }
 
             public static IReadOnlyList<IPathNode> CalculatePath(IPathNode endNode)
             {
                 var path = new LinkedList<IPathNode>();
-                for (var currentNode = endNode; currentNode != null; currentNode = currentNode.Parent) path.AddFirst(currentNode);
+                for (IPathNode currentNode = endNode; currentNode != null; currentNode = currentNode.Parent) path.AddFirst(currentNode);
                 path.RemoveFirst();
                 var pathArray = new IPathNode[path.Count];
                 path.CopyTo(pathArray, 0);

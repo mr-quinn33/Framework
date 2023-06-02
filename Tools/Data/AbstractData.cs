@@ -24,7 +24,7 @@ namespace Framework.Tools.Data
             get => value;
             protected set
             {
-                var newValue = value;
+                T newValue = value;
                 if (newValue.CompareTo(default) < 0) newValue = default;
                 if (newValue.CompareTo(maxValue) > 0) newValue = maxValue;
                 if (newValue.Equals(this.value)) return;
@@ -40,7 +40,7 @@ namespace Framework.Tools.Data
             get => maxValue;
             protected set
             {
-                var newMaxValue = value;
+                T newMaxValue = value;
                 if (newMaxValue.CompareTo(default) < 0) newMaxValue = default;
                 if (newMaxValue.Equals(maxValue)) return;
                 maxValue = newMaxValue;

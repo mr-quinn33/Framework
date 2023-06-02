@@ -171,7 +171,7 @@ namespace Framework.GameModes
         TResult IGameMode.SendQuery<TResult>(IQuery<TResult> query)
         {
             query.SetGameMode(this);
-            var result = query.Execute();
+            TResult result = query.Execute();
             query.SetGameMode(null);
             return result;
         }
@@ -180,7 +180,7 @@ namespace Framework.GameModes
         {
             var query = new TQuery();
             query.SetGameMode(this);
-            var result = query.Execute();
+            TResult result = query.Execute();
             query.SetGameMode(null);
             return result;
         }
@@ -262,8 +262,8 @@ namespace Framework.GameModes
             if (Initialized) return;
             var instance = new T();
             instance.Initialize();
-            foreach (var model in instance.models) model.Initialize();
-            foreach (var system in instance.systems) system.Initialize();
+            foreach (IModel model in instance.models) model.Initialize();
+            foreach (ISystem system in instance.systems) system.Initialize();
             instance.models.Clear();
             instance.systems.Clear();
             Instances.Add(typeof(T), instance);

@@ -11,7 +11,7 @@ namespace Framework.Tools.Extensions
             queue.Enqueue(root);
             while (queue.Count > 0)
             {
-                var transform = queue.Dequeue();
+                Transform transform = queue.Dequeue();
                 if (transform.name.Equals(name)) return transform;
                 foreach (Transform child in transform) queue.Enqueue(child);
             }
