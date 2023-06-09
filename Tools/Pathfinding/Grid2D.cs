@@ -36,6 +36,8 @@ namespace Framework.Tools.Pathfinding
 
         IUnregisterHandler RegisterOnValueChanged(Action<IReadOnlyGrid2D<T>, int, int, bool, int, int> action);
 
+        void RegisterOnValueChangedNonAlloc(Action<IReadOnlyGrid2D<T>, int, int, bool, int, int> action);
+
         void UnregisterOnValueChanged(Action<IReadOnlyGrid2D<T>, int, int, bool, int, int> action);
 
         bool Remove(T t);
@@ -105,6 +107,11 @@ namespace Framework.Tools.Pathfinding
         {
             OnValueChanged += action;
             return new Grid2DOnValueChangedUnregisterHandler(this, action);
+        }
+
+        public void RegisterOnValueChangedNonAlloc(Action<IReadOnlyGrid2D<T>, int, int, bool, int, int> action)
+        {
+            OnValueChanged += action;
         }
 
         public void UnregisterOnValueChanged(Action<IReadOnlyGrid2D<T>, int, int, bool, int, int> action)
