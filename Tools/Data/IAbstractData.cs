@@ -31,17 +31,25 @@ namespace Framework.Tools.Data
 
         IUnregisterHandler RegisterOnValueChanged(Action<IReadOnlyAbstractData<T>> action);
 
+        void RegisterOnValueChangedNonAlloc(Action<IReadOnlyAbstractData<T>> action);
+
         void UnregisterOnValueChanged(Action<IReadOnlyAbstractData<T>> action);
 
         IUnregisterHandler RegisterOnMaxValueChanged(Action<IReadOnlyAbstractData<T>> action);
+
+        void RegisterOnMaxValueChangedNonAlloc(Action<IReadOnlyAbstractData<T>> action);
 
         void UnregisterOnMaxValueChanged(Action<IReadOnlyAbstractData<T>> action);
 
         IUnregisterHandler RegisterOnValueEqualsMaxValue(Action<IReadOnlyAbstractData<T>> action);
 
+        void RegisterOnValueEqualsMaxValueNonAlloc(Action<IReadOnlyAbstractData<T>> action);
+
         void UnregisterOnValueEqualsMaxValue(Action<IReadOnlyAbstractData<T>> action);
 
         IUnregisterHandler RegisterOnValueEqualsDefaultValue(Action<IReadOnlyAbstractData<T>> action);
+
+        void RegisterOnValueEqualsDefaultValueNonAlloc(Action<IReadOnlyAbstractData<T>> action);
 
         void UnregisterOnValueEqualsDefaultValue(Action<IReadOnlyAbstractData<T>> action);
     }
