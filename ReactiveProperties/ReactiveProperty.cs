@@ -9,6 +9,8 @@ namespace Framework.ReactiveProperties
 
         IUnregisterHandler Register(Action<T> action);
 
+        void RegisterNonAlloc(Action<T> action);
+
         void Unregister(Action<T> action);
     }
 
@@ -39,6 +41,11 @@ namespace Framework.ReactiveProperties
         {
             OnValueChanged += action;
             return new ReactivePropertyUnregisterHandler<T>(this, action);
+        }
+
+        void IReactiveProperty<T>.RegisterNonAlloc(Action<T> action)
+        {
+            OnValueChanged += action;
         }
 
         void IReactiveProperty<T>.Unregister(Action<T> action)

@@ -34,8 +34,12 @@ namespace Framework.Tools.StateMachines
         Task SendCommandAsync<T>(T command, CancellationTokenSource source) where T : ICommandCancellableAsync;
 
         IUnregisterHandler RegisterOnGetSendCommand(Func<ISendCommand> callback);
+        
+        void RegisterOnGetSendCommandNonAlloc(Func<ISendCommand> callback);
 
         IUnregisterHandler RegisterOnGetSendCommandAsync(Func<ISendCommandAsync> callback);
+
+        void RegisterOnGetSendCommandAsyncNonAlloc(Func<ISendCommandAsync> callback);
 
         void UnregisterOnGetSendCommand(Func<ISendCommand> callback);
 
@@ -126,10 +130,20 @@ namespace Framework.Tools.StateMachines
             return new StateMachineOnGetSendCommandUnregisterHandler(this, callback);
         }
 
+        public void RegisterOnGetSendCommandNonAlloc(Func<ISendCommand> callback)
+        {
+            OnGetSendCommand += callback;
+        }
+
         public IUnregisterHandler RegisterOnGetSendCommandAsync(Func<ISendCommandAsync> callback)
         {
             OnGetSendCommandAsync += callback;
             return new StateMachineOnGetSendCommandAsyncUnregisterHandler(this, callback);
+        }
+
+        public void RegisterOnGetSendCommandAsyncNonAlloc(Func<ISendCommandAsync> callback)
+        {
+            OnGetSendCommandAsync += callback;
         }
 
         public void UnregisterOnGetSendCommand(Func<ISendCommand> callback)
