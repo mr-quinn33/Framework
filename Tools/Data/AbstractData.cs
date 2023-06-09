@@ -107,6 +107,11 @@ namespace Framework.Tools.Data
             return new AbstractDataOnValueChangedUnregisterHandler(this, action);
         }
 
+        public void RegisterOnValueChangedNonAlloc(Action<IReadOnlyAbstractData<T>> action)
+        {
+            OnValueChanged += action;
+        }
+
         public void UnregisterOnValueChanged(Action<IReadOnlyAbstractData<T>> action)
         {
             OnValueChanged -= action;
@@ -116,6 +121,11 @@ namespace Framework.Tools.Data
         {
             OnMaxValueChanged += action;
             return new AbstractDataOnMaxValueChangedUnregisterHandler(this, action);
+        }
+
+        public void RegisterOnMaxValueChangedNonAlloc(Action<IReadOnlyAbstractData<T>> action)
+        {
+            OnMaxValueChanged += action;
         }
 
         public void UnregisterOnMaxValueChanged(Action<IReadOnlyAbstractData<T>> action)
@@ -128,6 +138,11 @@ namespace Framework.Tools.Data
             OnValueEqualsMaxValue += action;
             return new AbstractDataOnValueEqualsMaxValueUnregisterHandler(this, action);
         }
+        
+        public void RegisterOnValueEqualsMaxValueNonAlloc(Action<IReadOnlyAbstractData<T>> action)
+        {
+            OnValueEqualsMaxValue += action;
+        }
 
         public void UnregisterOnValueEqualsMaxValue(Action<IReadOnlyAbstractData<T>> action)
         {
@@ -138,6 +153,11 @@ namespace Framework.Tools.Data
         {
             OnValueEqualsDefaultValue += action;
             return new AbstractDataOnValueEqualsDefaultValueUnregisterHandler(this, action);
+        }
+        
+        public void RegisterOnValueEqualsDefaultValueNonAlloc(Action<IReadOnlyAbstractData<T>> action)
+        {
+            OnValueEqualsDefaultValue += action;
         }
 
         public void UnregisterOnValueEqualsDefaultValue(Action<IReadOnlyAbstractData<T>> action)
