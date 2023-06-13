@@ -6,11 +6,11 @@ namespace Framework.Tools.Data
     [Serializable]
     public abstract class AbstractData<T> : IAbstractData<T> where T : struct, IEquatable<T>, IComparable, IComparable<T>
     {
-#if UNITY_64
+#if UNITY_EDITOR
         [UnityEngine.SerializeField]
 #endif
         private T value;
-#if UNITY_64
+#if UNITY_EDITOR
         [UnityEngine.SerializeField]
 #endif
         private T maxValue;
