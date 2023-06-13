@@ -26,6 +26,10 @@ namespace Framework.Tools.Data
             this.maxValue = maxValue;
         }
 
+        protected AbstractData(IReadOnlyAbstractData<T> other) : this(other.Value, other.MaxValue)
+        {
+        }
+
         public T Value
         {
             get => value;
