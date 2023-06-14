@@ -4,48 +4,48 @@ using Unity.Netcode;
 
 namespace Framework.Scripts.Netcode.GameObjects
 {
-#if UNITY_NETCODE_GAMEOBJECTS
+#if !UNITY_NETCODE_GAMEOBJECTS
     public abstract class AbstractNetworkBehaviour : NetworkBehaviour
     {
         public override void OnNetworkSpawn()
         {
             OnNetworkSpawnServer(IsServer);
-            OnNetworkSpawnClient(IsClient, IsOwner);
+            OnNetworkSpawnClient(IsClient);
+            OnNetworkSpawnOwner(IsOwner);
         }
 
         public override void OnNetworkDespawn()
         {
+            OnNetworkDespawnOwner(IsOwner);
+            OnNetworkDespawnClient(IsClient);
             OnNetworkDespawnServer(IsServer);
-            OnNetworkDespawnClient(IsClient, IsOwner);
         }
 
         private void OnNetworkSpawnServer(bool isServer)
         {
             if (!isServer) return;
             OnNetworkSpawnServer();
-            NetworkManager.NetworkTickSystem.Tick += ServerOnTick;
+            NetworkManager.NetworkTickSystem.Tick += OnTickServer;
         }
 
         private void OnNetworkDespawnServer(bool isServer)
         {
             if (!isServer) return;
-            NetworkManager.NetworkTickSystem.Tick -= ServerOnTick;
+            NetworkManager.NetworkTickSystem.Tick -= OnTickServer;
             OnNetworkDespawnServer();
         }
 
-        private void OnNetworkSpawnClient(bool isClient, bool isOwner)
+        private void OnNetworkSpawnClient(bool isClient)
         {
             if (!isClient) return;
             OnNetworkSpawnClient();
-            NetworkManager.NetworkTickSystem.Tick += ClientOnTick;
-            OnNetworkSpawnOwner(isOwner);
+            NetworkManager.NetworkTickSystem.Tick += OnTickClient;
         }
 
-        private void OnNetworkDespawnClient(bool isClient, bool isOwner)
+        private void OnNetworkDespawnClient(bool isClient)
         {
             if (!isClient) return;
-            OnNetworkDespawnOwner(isOwner);
-            NetworkManager.NetworkTickSystem.Tick -= ClientOnTick;
+            NetworkManager.NetworkTickSystem.Tick -= OnTickClient;
             OnNetworkDespawnClient();
         }
 
@@ -53,13 +53,13 @@ namespace Framework.Scripts.Netcode.GameObjects
         {
             if (!isOwner) return;
             OnNetworkSpawnOwner();
-            NetworkManager.NetworkTickSystem.Tick += OwnerOnTick;
+            NetworkManager.NetworkTickSystem.Tick += OnTickOwner;
         }
 
         private void OnNetworkDespawnOwner(bool isOwner)
         {
             if (!isOwner) return;
-            NetworkManager.NetworkTickSystem.Tick -= OwnerOnTick;
+            NetworkManager.NetworkTickSystem.Tick -= OnTickOwner;
             OnNetworkDespawnOwner();
         }
 
@@ -75,11 +75,11 @@ namespace Framework.Scripts.Netcode.GameObjects
 
         protected abstract void OnNetworkDespawnOwner();
 
-        protected abstract void ServerOnTick();
+        protected abstract void OnTickServer();
 
-        protected abstract void ClientOnTick();
-
-        protected abstract void OwnerOnTick();
+        protected abstract void OnTickClient();
+        
+        protected abstract void OnTickOwner();
     }
 #endif
 }
