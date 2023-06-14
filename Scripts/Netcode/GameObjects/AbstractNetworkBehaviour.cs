@@ -4,7 +4,7 @@ using Unity.Netcode;
 
 namespace Framework.Scripts.Netcode.GameObjects
 {
-#if !UNITY_NETCODE_GAMEOBJECTS
+#if UNITY_NETCODE_GAMEOBJECTS
     public abstract class AbstractNetworkBehaviour : NetworkBehaviour
     {
         public override void OnNetworkSpawn()
