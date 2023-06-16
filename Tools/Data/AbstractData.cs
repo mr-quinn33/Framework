@@ -176,6 +176,11 @@ namespace Framework.Tools.Data
             OnValueEqualsDefaultValue -= action;
         }
 
+        public override string ToString()
+        {
+            return $"{typeof(T).Name} {value.ToString()} / {maxValue.ToString()}";
+        }
+
         private sealed class AbstractDataOnValueChangedUnregisterHandler : IUnregisterHandler
         {
             private AbstractData<T> data;
